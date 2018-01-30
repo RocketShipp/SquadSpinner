@@ -1,0 +1,10 @@
+{
+  "sourceRoot": "./src",
+  "presets": ["es2015", "stage-0"],
+  "plugins": [
+    "syntax-async-functions",
+    "transform-class-properties",
+    "transform-object-rest-spread",
+    "transform-regenerator",
+  ]
+}
