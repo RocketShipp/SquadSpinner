@@ -3,7 +3,6 @@ import LocalStrategy from 'passport-local';
 import passportJwt, { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/UserModel';
 import bcrypt from 'bcrypt';
-import PassportFB, { Strategy as FacebookStrategy } from 'passport-facebook'
 require('dotenv').config();
 
 // Passport-Local log-in strategy
@@ -44,30 +43,5 @@ const authStrategy = new JwtStrategy(jwtOptions, (payload, next, err) => {
   }).catch((err) => next(err, false));
 });
 
-// Facebook Strategy gets user from facebook
-const facebookStrategy = new FacebookStrategy({
-  clientID: 1931096037151299,
-  clientSecret: '05a1aec7bc77795a45e6ea7c9a2b8de3',
-  callbackURL: "http://localhost:3000/api/auth/facebook/callback",
-  profileFields: ['id', 'email', 'name']
-}, (accessToken, refreshToken, profile, done) => {
-    console.log(profile)
-    // Looks for FB user in DB
-    User.findOne({facebookID: profile.id}, (err, user) => {
-      // Handle errors
-      if (err) { return done(err, false) }
-      // If user is in DB, return user
-      if (user) { return done(null, user) }
-      // Save user if it is not in DB already and return user
-      const newUser = new User({
-        facebookEmail: profile.emails[0].value,
-        facebookID: profile.id,
-        password: accessToken
-      })
-      newUser.save((err) ? done(`Error saving Facebook user.`) : done(null, newUser));
-    })
-})
-
 Passport.use('signInStrategy', signInStrategy);
 Passport.use('authStrategy', authStrategy);
-Passport.use('facebookStrategy', facebookStrategy);

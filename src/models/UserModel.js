@@ -6,7 +6,7 @@ const saltRounds = _.toNumber(process.env.SALTROUNDS);
 
 const UserSchema = new Mongoose.Schema ({
   email: { type: String, required: true, unique: true },
-  userName: { type: String, required: true },
+  userName: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   lobbiesJoined: [
     {

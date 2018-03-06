@@ -1,0 +1,29 @@
+.menuItem {
+  div {
+    margin-bottom: .5rem;
+    div {
+      padding: 0 !important;
+    }
+  }
+}
+.drawerContents {
+  text-align: center !important;
+}
+.drawerContents > div > div {
+  clear: both;
+  overflow: hidden;
+}
+.dialogAppBar {
+  h1 {
+    color: white !important;
+    font-weight: bold;
+  }
+  .closeButton {
+    font-size: 2rem;
+    padding: .5rem 0 !important;
+    box-shadow: none !important;
+    button {
+      color: white;
+    }
+  }
+}

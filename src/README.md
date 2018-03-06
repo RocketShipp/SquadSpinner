@@ -21,6 +21,7 @@ __  __
 * __Requirements:__ None
 * __Request Body:__
 `{ "email": "example@example.com",`
+`"userName": "plaintext" ,`
 `"password": "plaintext" }`
 
 ### GET '/getUser'
@@ -45,20 +46,20 @@ __ __
 * __Requirements:__ Valid user token stored in authorization header
 * __Request Body:__
 `{ "lobbyName": "Lizard People",`
-&nbsp;&nbsp;&nbsp;`"settings": {`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"voteToSkip": { "voteToSkipEnabled": true, "requiredVotesToSkip": 2 },`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"hideVideoPlayer": false`
-&nbsp;&nbsp;&nbsp;`}`
+`"settings": {`
+`"voteToSkip": { "voteToSkipEnabled": true, "requiredVotesToSkip": 2 },`
+`"hideVideoPlayer": false`
+`}`
 `}`
 
 ### PUT '/updateLobbySettings/:lobby_id'
 * __Requirements:__ Token stored in authorization header containing userId must be identical to the lobby's ownerId (lobby.users.ownerId)
 * __Request Body:__
 `{ "lobbyName": "Lizard People",`
-&nbsp;&nbsp;&nbsp;`"settings": {`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"voteToSkip": { "voteToSkipEnabled": true, "requiredVotesToSkip": 2 },`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"hideVideoPlayer": false`
-&nbsp;&nbsp;&nbsp;`}`
+`"settings": {`
+`"voteToSkip": { "voteToSkipEnabled": true, "requiredVotesToSkip": 2 },`
+`"hideVideoPlayer": false`
+`}`
 `}`
 
 ### DELETE '/deleteLobby/:lobby_id'
@@ -82,12 +83,12 @@ __ __
 * __Requirements:__ UserId from token in header must exist in the joined users or ownerId of lobby being queried
 * __Request Body:__
 `{ "songTitle": "Metallica - Fade To Black",`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"songUrl": "https://www.youtube.com/watch?v=WEQnzs8wl6E",`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"provider": "youtube"`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"addedByUser": {`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"_id": "",`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`"userName": ""`
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`}`
+`"songUrl": "https://www.youtube.com/watch?v=WEQnzs8wl6E",`
+`"provider": "youtube"`
+`"addedByUser": {`
+`"_id": "",`
+`"userName": ""`
+`}`
 `}`
 
 ### GET '/leaveLobby/:lobby_id'

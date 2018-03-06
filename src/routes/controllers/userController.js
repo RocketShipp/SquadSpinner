@@ -21,14 +21,14 @@ const defaultSignup = ( req, res, next ) => {
   // Handle missing email or password
   if (!email || !userName || !password) return res.status(422).json({ error: 'Provide a username, email, and password!' })
 
-  // Save new user and respond with token
+  // Save new user, respond with success and token
   newUser.save().then((user) => {
-    return res.json({ token: tokenForUser(user) })
+    return res.json({success: true, token: tokenForUser(user) })
   })
   .catch((err) => {
     // Duplicate email error
     if (err.name === 'MongoError' && err.code === 11000) {
-      return res.status(500).json({ error: `${newUser.email} is already in use!` })
+      return res.status(500).json({ error: `${newUser.email} or ${newUser.userName} is already in use!` })
     }
   })
 }
@@ -66,12 +66,6 @@ const defaultEditUser = ( req, res, done ) => {
   })
 }
 
-// Unfinished...
-const fbCallback = ( req, res ) => {
-  console.log('Facebook user (change this later!!!)' + req.user);
-  return res.json({ token: tokenForUser(req.user) });
-}
-
-const userController = { defaultLogin, defaultSignup, getUser, defaultEditUser, fbCallback };
+const userController = { defaultLogin, defaultSignup, getUser, defaultEditUser };
 
 export default userController;

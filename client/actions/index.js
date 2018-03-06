@@ -1,22 +1,41 @@
-import axios from 'axios';
-
-export const FETCH_PLAYLIST = 'FETCH_PLAYLIST';
-export const CREATE_USER = 'CREATE_USER';
-
-export function fetchPlaylist(lobbyId) {
-  const url = '';
-  const request = axios.get(url);
+export const getUserToken = (payload) => {
   return {
-    type: FETCH_PLAYLIST,
-    payload: request
+    type: 'GET_USER_TOKEN',
+    payload
   }
-}
+};
 
-export function createUser(user) {
-  const url = '';
-  const request = axios.get(url);
+export const updateUserToken = (newToken) => {
   return {
-    type: CREATE_USER,
-    payload: request
+    type: 'UPDATE_USER_TOKEN',
+    payload: newToken
   }
-}
+};
+
+export const removeUserToken = () => {
+  return {
+    type: 'REMOVE_USER_TOKEN',
+    payload: null
+  }
+};
+
+export const setErrorText = (text) => {
+  return {
+    type: 'SET_ERROR_TEXT',
+    payload: text
+  }
+};
+
+export const clearErrorText = () => {
+  return {
+    type: 'CLEAR_ERROR_TEXT',
+    payload: false
+  }
+};
+
+export const updateComponentTitle = (payload) => {
+  return {
+    type: 'UPDATE_COMPONENT_TITLE',
+    payload
+  }
+};

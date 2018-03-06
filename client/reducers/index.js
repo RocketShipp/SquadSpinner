@@ -1,8 +1,12 @@
-import { combineReducers } from 'redux';
-import PlaylistReducer from './reducer_playlist';
+import {combineReducers} from 'redux';
+import reducerUserToken from './reducer_userToken';
+import reducerErrorText from './reducer_errorText';
+import reducerComponentTitle from './reducer_componentTitle';
 
 const rootReducer = combineReducers({
-  playlist: PlaylistReducer
-})
+  userToken: reducerUserToken,
+  errorText: reducerErrorText,
+  componentTitle: reducerComponentTitle
+});
 
 export default rootReducer;

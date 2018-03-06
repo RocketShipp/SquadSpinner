@@ -1,0 +1,39 @@
+html {
+  height: 100%;
+  body {
+    background-color: black;
+    height: 100%;
+    #root {
+      height: 100%;
+    }
+  }
+}
+.bottomControlsContainer {
+  padding: .3rem;
+  height: 3rem;
+  z-index: 100;
+  i {
+    font-size: 2rem;
+  }
+}
+.cardHeader {
+  div {
+    padding: 0 !important;
+  }
+}
+#noItemsInPlaylist {
+  font-size: 1.5rem;
+}
+.playlistContainer {
+  margin-bottom: 3.5rem;
+}
+.resultText {
+  font-style: italic;
+  font-weight: bold;
+}
+.squadDialog {
+  padding-top: 0 !important;
+  .dialogBody::-webkit-scrollbar {
+    display: none;
+  }
+}
