@@ -34,7 +34,7 @@ const defaultSignup = ( req, res, done ) => {
 }
 
 // Return success message and user object passed from authStrategy
-const getUser = ( req, res ) => {
+const getUser = ( req, res, err ) => {
   return res.json({success: true, user: req.user});
 }
 

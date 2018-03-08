@@ -4,7 +4,7 @@ import Authentication from './authentication';
 
 const apiLimiter = new RateLimit({
   windowMs: 1000, // 1 Second
-  max: 3,
+  max: 5,
   delayMs: 0, //disabled
   message: 'Too many requests have been made!',
   handler: (req, res) => {

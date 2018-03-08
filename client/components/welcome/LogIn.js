@@ -17,8 +17,8 @@ class LogIn extends Component {
 
   passCredentialsUp(event) {
     event.preventDefault();
-
     this.props.handleLogin(this.state);
+    this.setState({password: ''});
   }
 
   handleChange(event) {
@@ -63,6 +63,7 @@ class LogIn extends Component {
               className="welcomeInput"
               name="password"
               floatingLabelText="Password"
+              type="password"
               fullWidth={true}
               onChange={(event) => this.handleChange(event)}
               value={this.state.password}

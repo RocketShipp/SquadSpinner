@@ -1,8 +1,7 @@
 import Mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
-import _ from 'lodash';
 
-const saltRounds = _.toNumber(process.env.SALTROUNDS);
+const saltRounds = parseInt(process.env.SALTROUNDS);
 
 const UserSchema = new Mongoose.Schema ({
   email: { type: String, required: true, unique: true },

@@ -19,7 +19,6 @@ class SignUp extends Component {
 
   passCredentialsUp(event) {
     event.preventDefault();
-
     this.props.handleSignUp(this.state);
   }
 

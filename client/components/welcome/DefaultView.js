@@ -9,8 +9,8 @@ class DefaultView extends Component {
   render() {
     return (
       <Col
-        xs={12} sm={10} lg={8}
-        offset={{lg:2, sm:1}}
+        xs={12} lg={10}
+        offset={{lg:1}}
         className="viewCol"
         style={{
           textAlign: 'center',
@@ -21,7 +21,7 @@ class DefaultView extends Component {
         <p className="defaultViewSlogan">The Party Playlister</p>
         <Col
           className="logoContainer"
-          xs={8} md={10} xl={6} offset={{xs:2, md:1, xl:3}}
+          xs={8} md={6} xl={4} offset={{xs:2, md:3, xl:4}}
         >
           {SSLogo}
         </Col>

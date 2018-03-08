@@ -24,7 +24,7 @@ __  __
 `"userName": "plaintext" ,`
 `"password": "plaintext" }`
 
-### GET '/getUser'
+### POST '/getUser'
 * __Requirements:__ Token stored in authorization header containing user object
 * __Request Body:__ None
 

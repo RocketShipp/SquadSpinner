@@ -7,10 +7,10 @@ import TextField from 'material-ui/TextField';
 import WelcomeToolbar from './WelcomeToolbar';
 const colors = require('material-ui/styles/colors');
 import $ from 'jquery';
-import {aboutText} from '../../resources';
 import DefaultView from './DefaultView';
 import SignUpView from './SignUp';
 import LogInView from './LogIn';
+import AboutView from './About';
 import './stylesheets/welcome.scss';
 
 class Welcome extends Component {
@@ -77,7 +77,6 @@ class Welcome extends Component {
   }
 
   handleLogin(credentials) {
-
     switch(true) {
       case (!credentials.email.trim() || !credentials.password.trim()):
         this.props.setErrorText('You must fill each field');
@@ -96,38 +95,6 @@ class Welcome extends Component {
           })
         break;
     }
-
-
-  }
-
-  aboutView() {
-    return (
-      <Col
-        xs={12} md={8} lg={6}
-        offset={{md: 2, lg:3}}
-        className="viewCol"
-        style={{
-          textAlign: 'center',
-          maxHeight: this.state.clientHeight - this.state.toolbarHeight,
-          overflowY: 'scroll'
-        }}
-      >
-        <Card
-          className="welcomeCard"
-        >
-          <CardTitle
-            title="What is SquadSpinner?"
-            style={{
-              padding: 'none',
-              fontWeight: 'bold'
-            }}
-          />
-          <CardText className="aboutText">
-            {aboutText}
-          </CardText>
-        </Card>
-      </Col>
-    )
   }
 
   renderActiveView() {
@@ -162,7 +129,13 @@ class Welcome extends Component {
         );
         break;
       case 'ABOUT':
-        return this.aboutView();
+        return (
+          <AboutView
+            toolbarHeight={this.state.toolbarHeight}
+            clientHeight={this.state.clientHeight}
+            setView={this.setView.bind(this)}
+          />
+        )
         break;
     }
   }

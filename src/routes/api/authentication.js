@@ -12,12 +12,15 @@ const authStrategy = Passport.authenticate('authStrategy', {
   failureRedirect: '/'
 });
 
+let test = () => {
+  return console.log('test')
+}
 
 export default (router) => {
   // User Routes
   router.post('/login', signInStrategy, userController.defaultLogin);
   router.post('/signup', userController.defaultSignup);
-  router.get('/getUser', authStrategy, userController.getUser);
+  router.post('/getUser', authStrategy, userController.getUser);
   router.put('/editUser/:user_id', authStrategy, userController.defaultEditUser);
 
   // Lobby Routes
