@@ -1,14 +1,14 @@
-export const getUserToken = (payload) => {
+export const getUserToken = () => {
   return {
     type: 'GET_USER_TOKEN',
-    payload
+    payload: null
   }
 };
 
-export const updateUserToken = (newToken) => {
+export const updateUserToken = (payload) => {
   return {
     type: 'UPDATE_USER_TOKEN',
-    payload: newToken
+    payload
   }
 };
 
@@ -19,10 +19,10 @@ export const removeUserToken = () => {
   }
 };
 
-export const setErrorText = (text) => {
+export const setErrorText = (payload) => {
   return {
     type: 'SET_ERROR_TEXT',
-    payload: text
+    payload
   }
 };
 

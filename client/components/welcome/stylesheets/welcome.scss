@@ -1,8 +1,9 @@
-.credentialsToolbar {
+.welcomeToolbar {
   width: 100% !important;
   padding: 0 !important;
   .toolbarTitle {
     font-size: 1.8rem !important;
+    font-weight: bold;
   }
   span, i {
     color: white !important;
@@ -13,12 +14,13 @@
     display: none;
   }
   .defaultViewSlogan {
-    border: .1rem solid white;
+    color: black;
+    text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, .5px .5px #fff, -.5px -.5px 0 #fff, .5px -.5px 0 #fff, -.5px .5px 0 #fff;
     font-size: 2.8rem;
     padding: .5rem;
     margin: 1rem 0;
   }
-  .credButton {
+  .welcomeButton {
     margin: 1rem 0;
     &:last-of-type {
       margin-left: 1rem;
@@ -33,16 +35,16 @@
   max-width: 100%;
   animation: spin 2s linear infinite;
 }
-.credentialsCard {
+.welcomeCard {
   margin: 1rem 0;
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 0 1.5rem;
   .aboutText {
-    margin-top: 1rem;
+    margin: 1rem 0;
     line-height: 1.5rem !important;
     padding: 0 !important;
   }
 }
-.credentialsInput {
+.welcomeInput {
     display: block !important;
 }
 

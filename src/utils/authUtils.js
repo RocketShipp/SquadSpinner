@@ -12,11 +12,13 @@ const signInStrategy = new LocalStrategy({
 },
 (email, password, done) => {
   User.findOne({ email }).exec().then( user => {
+
     // If there is no user, return done()
-    if (!user) return done(null, false);
+    if (!user) return done(`${email} not found in records`);
+
     // If there is a user, compare passwords with bcrypt
     bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) return done(err, false);
+      if (err) return done(err);
       if (!isMatch) return done('Incorrect Password!');
       console.log(`User '${user.email}' logged in on ${new Date()}!`);
       // Return user object upon success

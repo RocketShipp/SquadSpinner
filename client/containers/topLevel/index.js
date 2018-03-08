@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 const colors = require('material-ui/styles/colors');
 import Snackbar from 'material-ui/Snackbar';
-import Credentials from '../../components/credentials';
+import Welcome from '../../components/welcome';
 import SquadLobby from '../../components/squadLobby';
 import ErrorPage from './errorPage';
 import {updateUserToken, getUserToken, setErrorText, clearErrorText, updateComponentTitle} from '../../actions';
@@ -15,43 +15,44 @@ import {updateUserToken, getUserToken, setErrorText, clearErrorText, updateCompo
 class App extends Component {
 
   componentWillMount() {
-    this.props.getUserToken(localStorage.getItem('token') || null);
-    console.log('Token: ' + this.props.userToken);
+    this.props.getUserToken();
   }
-
-  handleSignUp(credentials) {
-      const { email, userName, password, confirmPassword} = credentials;
-      if (!email.trim() || !userName.trim() || !password.trim() || password.trim() !== confirmPassword.trim()) {
-        this.props.setErrorText('Please fill all fields and make sure the passwords match.')
-      } else {
-        axios.post('/api/signup', credentials)
-          .then(resp => {
-            const { token } = resp.data;
-            localStorage.setItem('token', token);
-            this.props.clearErrorText();
-            this.props.updateUserToken(token);
-          })
-          .catch(err => console.log(err));
-      }
-    }
 
   renderErrorAlert() {
     return (
       (this.props.errorText) ?
         <Snackbar
+          bodyStyle={{
+            backgroundColor: colors.red900,
+            textAlign: 'center',
+          }}
+          contentStyle={{
+            color: 'white',
+            fontWeight: 'bold'
+          }}
           open={this.props.errorText ? true : false}
           message={this.props.errorText}
-          autoHideDuration={5000}
           onRequestClose={this.props.clearErrorText}
         /> : null
     )
   }
 
-  renderCredentials() {
+  renderWelcome() {
     return (
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" render={() => <Credentials componentTitle={this.props.componentTitle} updateComponentTitle={this.props.updateComponentTitle} />} />
+          <Route exact path="/"
+            render={() =>
+              <Welcome
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                setErrorText={this.props.setErrorText}
+                updateUserToken={this.props.updateUserToken}
+                getUserToken={this.props.getUserToken}
+                userToken={this.props.userToken}
+              />
+            }
+          />
           <Route component={ErrorPage} />
         </Switch>
       </BrowserRouter>
@@ -81,7 +82,7 @@ class App extends Component {
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
         <span>
           {this.renderErrorAlert()}
-          {this.props.userToken ? this.renderApp() : this.renderCredentials() }
+          {this.props.userToken ? this.renderApp() : this.renderWelcome() }
         </span>
       </MuiThemeProvider>
       </span>

@@ -3,20 +3,20 @@ import {Toolbar, ToolbarTitle} from 'material-ui/Toolbar';
 import {connect} from 'react-redux';
 import $ from 'jquery';
 
-class CredentialsToolbar extends Component {
+class WelcomeToolbar extends Component {
 
   componentDidMount(props) {
-    this.props.getToolbarHeight( $('.credentialsToolbar').height() );
+    this.props.setToolbarHeight( $('.welcomeToolbar').height() );
   }
 
   render() {
     // Handle resizing of the window
     $(window).resize(() => {
-      this.props.getToolbarHeight( $('.credentialsToolbar').height() );
+      this.props.setToolbarHeight( $('.welcomeToolbar').height() );
     });
     return (
       <Toolbar
-        className="credentialsToolbar"
+        className="welcomeToolbar"
       >
         <ToolbarTitle
           className="toolbarTitle"
@@ -35,4 +35,4 @@ class CredentialsToolbar extends Component {
 
 
 
-export default CredentialsToolbar;
+export default WelcomeToolbar;

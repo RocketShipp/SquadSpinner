@@ -14,7 +14,7 @@ const apiLimiter = new RateLimit({
 
 const apiErrorHandler = (error, req, res, next) => {
   if (error) {
-    return res.status(500).json({success: false, message: error});
+    return res.json({success: false, message: error});
   }
   return res.status(404).json({message: 'Sorry, there is nothing at this endpoint.'});
 }
