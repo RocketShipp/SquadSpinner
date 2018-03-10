@@ -1,3 +1,10 @@
+export const setClientWindow = () => {
+  return {
+    type: 'SET_CLIENT_WINDOW',
+    payload: null
+  }
+}
+
 export const getUserToken = () => {
   return {
     type: 'GET_USER_TOKEN',

@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {Container, Row, Col} from 'react-grid-system';
-import RaisedButton from 'material-ui/RaisedButton';
-import {Card, CardText, CardTitle} from 'material-ui/Card';
-import TextField from 'material-ui/TextField';
+import {Container, Row} from 'react-grid-system';
 import WelcomeToolbar from './WelcomeToolbar';
 const colors = require('material-ui/styles/colors');
 import $ from 'jquery';
@@ -13,6 +10,8 @@ import LogInView from './LogIn';
 import AboutView from './About';
 import './stylesheets/welcome.scss';
 
+const toolbarHeight = 56;
+
 class Welcome extends Component {
 
   // activeView is what determines whether the Sign Up screen is shown, or the Log In screen is shown
@@ -20,20 +19,12 @@ class Welcome extends Component {
   constructor(props){
     super(props);
     this.state = {
-      toolbarHeight: null,
-      clientHeight: null,
       activeView: null
     }
   }
 
   componentDidMount() {
-    this.setState({clientHeight: $(window).height()})
     this.props.updateComponentTitle('SquadSpinner');
-  }
-
-
-  setToolbarHeight(height) {
-    this.setState({toolbarHeight: height});
   }
 
   setView(view) {
@@ -65,6 +56,7 @@ class Welcome extends Component {
           .then(res => {
             if (res.data.success) {
               this.props.updateUserToken(res.data.token);
+              this.props.clearErrorText();
             } else {
               this.props.setErrorText(res.data.message);
             }
@@ -86,6 +78,7 @@ class Welcome extends Component {
           .then(res => {
             if (res.data.success) {
               this.props.updateUserToken(res.data.token);
+              this.props.clearErrorText();
             } else {
               this.props.setErrorText(res.data.message);
             }
@@ -102,8 +95,8 @@ class Welcome extends Component {
       case null:
         return (
           <DefaultView
-            toolbarHeight={this.state.toolbarHeight}
-            clientHeight={this.state.clientHeight}
+            toolbarHeight={toolbarHeight}
+            clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
           />
         );
@@ -111,8 +104,8 @@ class Welcome extends Component {
       case 'SIGN_UP':
         return (
           <SignUpView
-            toolbarHeight={this.state.toolbarHeight}
-            clientHeight={this.state.clientHeight}
+            toolbarHeight={toolbarHeight}
+            clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
             handleSignUp={this.handleSignUp.bind(this)}
           />
@@ -121,8 +114,8 @@ class Welcome extends Component {
       case 'LOG_IN':
         return (
           <LogInView
-            toolbarHeight={this.state.toolbarHeight}
-            clientHeight={this.state.clientHeight}
+            toolbarHeight={toolbarHeight}
+            clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
             handleLogin={this.handleLogin.bind(this)}
           />
@@ -131,8 +124,8 @@ class Welcome extends Component {
       case 'ABOUT':
         return (
           <AboutView
-            toolbarHeight={this.state.toolbarHeight}
-            clientHeight={this.state.clientHeight}
+            toolbarHeight={toolbarHeight}
+            clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
           />
         )
@@ -140,22 +133,14 @@ class Welcome extends Component {
     }
   }
 
-
   render(props) {
-
-    // Handle resizing of the window
-    $(window).resize(() => {
-      this.setState({clientHeight: $(window).height()})
-    });
-
     return (
       <span>
         <WelcomeToolbar
-          setToolbarHeight={this.setToolbarHeight.bind(this)}
           componentTitle={this.props.componentTitle}
         />
         <Container fluid={true} style={{
-          height: (this.state.clientHeight - this.state.toolbarHeight),
+          height: (this.props.clientWindow.height - toolbarHeight),
           alignItems: 'center',
           display: 'flex',
           justifyContent: 'center',

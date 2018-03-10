@@ -6,11 +6,20 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 const colors = require('material-ui/styles/colors');
+import $ from 'jquery';
 import Snackbar from 'material-ui/Snackbar';
 import Welcome from '../../components/welcome';
 import SquadLobby from '../../components/squadLobby';
 import ErrorPage from './errorPage';
-import {updateUserToken, getUserToken, setErrorText, clearErrorText, updateComponentTitle} from '../../actions';
+import Dashboard from '../../components/dashboard';
+import {
+  setClientWindow,
+  updateUserToken,
+  getUserToken,
+  setErrorText,
+  clearErrorText,
+  updateComponentTitle
+} from '../../actions';
 
 class App extends Component {
 
@@ -50,6 +59,8 @@ class App extends Component {
                 updateUserToken={this.props.updateUserToken}
                 getUserToken={this.props.getUserToken}
                 userToken={this.props.userToken}
+                clientWindow={this.props.clientWindow}
+                clearErrorText={this.props.clearErrorText}
               />
             }
           />
@@ -63,7 +74,24 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route exact path="/" component={SquadLobby} />
+          <Route exact path="/"
+            render={() =>
+              <Dashboard
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                clientWindow={this.props.clientWindow}
+              />
+            }
+          />
+          <Route exact path="/lobby"
+            render={() =>
+              <SquadLobby
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                clientWindow={this.props.clientWindow}
+              />
+            }
+          />
           <Route component={ErrorPage} />
         </Switch>
       </BrowserRouter>
@@ -77,14 +105,21 @@ class App extends Component {
     darkBaseTheme.palette.accent1Color = colors.grey100;
     darkBaseTheme.palette.accent2Color = colors.grey900;
 
+    // Handle resizing of the window
+    $(window).resize(() => {
+      // Make sure browser doesn't fire multiple times resulting in resize lag
+      clearTimeout($.data(this, 'resizeTimer'));
+      $.data(this, 'resizeTimer', setTimeout(() => { this.props.setClientWindow() }, 200));
+    });
+
     return (
       <span>
-      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
-        <span>
-          {this.renderErrorAlert()}
-          {this.props.userToken ? this.renderApp() : this.renderWelcome() }
-        </span>
-      </MuiThemeProvider>
+        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
+          <span>
+            {this.renderErrorAlert()}
+            {this.props.userToken ? this.renderApp() : this.renderWelcome() }
+          </span>
+        </MuiThemeProvider>
       </span>
 
     )
@@ -93,6 +128,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
+    clientWindow: state.clientWindow,
     userToken: state.userToken,
     errorText: state.errorText,
     componentTitle: state.componentTitle
@@ -101,6 +137,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    setClientWindow,
     updateUserToken,
     getUserToken,
     setErrorText,

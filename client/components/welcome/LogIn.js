@@ -18,7 +18,6 @@ class LogIn extends Component {
   passCredentialsUp(event) {
     event.preventDefault();
     this.props.handleLogin(this.state);
-    this.setState({password: ''});
   }
 
   handleChange(event) {

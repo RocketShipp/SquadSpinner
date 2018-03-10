@@ -13,19 +13,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      squadName: 'Austins Squad',
       isOwner: true,
       dialogOpen: false,
       drawerOpen: false,
       songUrl: null,
       playing: false,
       playlist: [],
-      results: [],
-      squadShortID: 'DA3jKI42'
+      results: []
     };
   }
 
   componentDidMount() {
+    this.props.updateComponentTitle('Lobby Name');
     if (this.state.playlist.length >= 1) {
       this.setState({
         songUrl: this.state.playlist[0].url
@@ -58,21 +57,10 @@ class App extends Component {
   }
 
   render() {
-    // Handle resizing of the window
-    $(window).resize(() => {
-      clientWindow.width = $(window).width();
-      clientWindow.height = $(window).height();
-    });
-
-    let clientWindow = {
-      width: $(window).width(),
-      height: $(window).height()
-    }
-
     return (
       <div>
         <SquadDrawer
-          squadShortID={this.state.squadShortID}
+          squadShortID={'DA3jKI42'}
           drawerOpen={this.state.drawerOpen}
           drawerClose={this.drawerClose.bind(this)}
           queueSong={this.queueSong.bind(this)}
@@ -83,11 +71,11 @@ class App extends Component {
           results={this.state.results}
           dialogClose={this.dialogClose}
           dialogOpen={this.state.dialogOpen}
-          clientWidth={clientWindow.width}
+          clientWidth={this.props.clientWindow.width}
         />
         <SquadToolbar
           drawerToggle={this.drawerToggle.bind(this)}
-          squadName={this.state.squadName}
+          squadName={this.props.componentTitle}
         />
         <BottomControls
           playing={this.state.playing}
@@ -97,7 +85,7 @@ class App extends Component {
         />
         <InnerContent
           url={this.state.songUrl}
-          height={clientWindow.height}
+          height={this.props.clientWindow.height}
           onEnded={this.handleEnd.bind(this)}
           onError={this.handleEnd.bind(this)}
           handlePlay={this.handlePlay.bind(this)}
