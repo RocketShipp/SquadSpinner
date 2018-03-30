@@ -28,9 +28,9 @@ __  __
 * __Requirements:__ Token stored in authorization header containing user object
 * __Request Body:__ None
 
-### PUT '/editUser/:user_id'
-* __Requirements:__ Token stored in authorization header containing userId identical to URL parameter supplied userId
-* __Note:__ User may only change userName
+### PUT '/editUser'
+* __Requirements:__ Token stored in authorization header containing user object
+* __Note:__ User may *currently* only change their userName
 * __Request Body:__
 `{ "email": "example@example.com",`
 `"userName": "Spicyb0i" }`
@@ -38,7 +38,7 @@ __  __
 __ __
 # Lobby API:
 
-### GET '/getLobby/:shortId'
+### POST '/getLobby/:shortId'
 * __Requirements:__ Valid user token stored in authorization header
 * __Request Body:__ None
 
@@ -66,7 +66,7 @@ __ __
 * __Requirements:__ Token stored in authorization header containing userId must be identical to lobby.users.ownerId
 * __Request Body:__ None
 
-### GET '/removeSong/:song_id/fromLobby/:lobby_id'
+### POST '/removeSong/:song_id/fromLobby/:lobby_id'
 * __Requirements:__ Token stored in authorization header containing userId must be identical to lobby.users.ownerId
 * __Notes:__ Only the lobby owner may remove a song from the queue
 * __Request Body:__ None
@@ -74,7 +74,7 @@ __ __
 __ __
 # User & Lobby API:
 
-### GET '/joinLobby/:lobby_id'
+### POST '/joinLobby/:lobby_id'
 * __Requirements:__ UserId from token in header must not exist in the bannedUsers or joined array of lobby being queried
 * __Notes:__ This adds the user to the queried lobby.users.joined as well as adding the lobbyId to the user.joinedLobbies
 * __Request Body:__ None
@@ -91,12 +91,12 @@ __ __
 `}`
 `}`
 
-### GET '/leaveLobby/:lobby_id'
+### POST '/leaveLobby/:lobby_id'
 * __Requirements:__ Token stored in authorization header containing user object
 * __Notes:__ The owner of a lobby cannot leave a lobby until it is deleted
 * __Request Body:__ None
 
-### GET '/banUser/:user_id/fromLobby/:lobby_id'
+### POST '/banUser/:user_id/fromLobby/:lobby_id'
 * __Requirements:__
   * UserId from token in header must match the queried lobby's owner
   * User must exist in lobby.users.joined to get banned
@@ -104,7 +104,7 @@ __ __
 * __Notes:__ The owner of a lobby cannot leave a lobby until it is deleted.
 * __Request Body:__ None
 
-### GET '/ubanUser/:user_id/fromLobby/:lobby_id'
+### POST '/ubanUser/:user_id/fromLobby/:lobby_id'
 * __Requirements:__
   * UserId from token in header must match the queried lobby's owner
   * User must exist in lobby.users.bannedUsers to get unbanned

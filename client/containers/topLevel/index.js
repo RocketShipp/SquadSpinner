@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {HashRouter, Switch, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
@@ -12,12 +12,19 @@ import Welcome from '../../components/welcome';
 import SquadLobby from '../../components/squadLobby';
 import ErrorPage from './errorPage';
 import Dashboard from '../../components/dashboard';
+import CreateSquad from '../../components/createSquad';
+import JoinSquad from '../../components/joinSquad';
+import MySquads from '../../components/mySquads';
+import AccountSettings from '../../components/accountSettings';
 import {
   setClientWindow,
   updateUserToken,
   getUserToken,
+  removeUserToken,
   setErrorText,
   clearErrorText,
+  setSuccessText,
+  clearSuccessText,
   updateComponentTitle
 } from '../../actions';
 
@@ -27,28 +34,31 @@ class App extends Component {
     this.props.getUserToken();
   }
 
-  renderErrorAlert() {
-    return (
-      (this.props.errorText) ?
+  renderAlert() {
+    let alertText = this.props.successText || this.props.errorText;
+    if (alertText) {
+      return (
         <Snackbar
+          autoHideDuration={4000}
           bodyStyle={{
-            backgroundColor: colors.red900,
+            backgroundColor: this.props.successText ? colors.green800 : colors.red900,
             textAlign: 'center',
           }}
           contentStyle={{
             color: 'white',
             fontWeight: 'bold'
           }}
-          open={this.props.errorText ? true : false}
-          message={this.props.errorText}
-          onRequestClose={this.props.clearErrorText}
-        /> : null
-    )
+          open={alertText ? true : false}
+          message={alertText}
+          onRequestClose={this.props.successText ? this.props.clearSuccessText : this.props.clearErrorText}
+        />
+      )
+    }
   }
 
   renderWelcome() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <Switch>
           <Route exact path="/"
             render={() =>
@@ -60,19 +70,18 @@ class App extends Component {
                 getUserToken={this.props.getUserToken}
                 userToken={this.props.userToken}
                 clientWindow={this.props.clientWindow}
-                clearErrorText={this.props.clearErrorText}
               />
             }
           />
           <Route component={ErrorPage} />
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 
   renderApp() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <Switch>
           <Route exact path="/"
             render={() =>
@@ -83,7 +92,56 @@ class App extends Component {
               />
             }
           />
-          <Route exact path="/lobby"
+          <Route exact path="/createsquad"
+            render={() =>
+              <CreateSquad
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                clientWindow={this.props.clientWindow}
+                setErrorText={this.props.setErrorText}
+                setSuccessText={this.props.setSuccessText}
+                userToken={this.props.userToken}
+              />
+            }
+          />
+          <Route exact path="/joinsquad"
+            render={() =>
+              <JoinSquad
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                clientWindow={this.props.clientWindow}
+                setErrorText={this.props.setErrorText}
+                userToken={this.props.userToken}
+              />
+            }
+          />
+          <Route exact path="/mysquads"
+            render={() =>
+              <MySquads
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                clientWindow={this.props.clientWindow}
+                setErrorText={this.props.setErrorText}
+                setSuccessText={this.props.setSuccessText}
+                userToken={this.props.userToken}
+              />
+            }
+          />
+          <Route exact path="/account"
+            render={() =>
+              <AccountSettings
+                componentTitle={this.props.componentTitle}
+                updateComponentTitle={this.props.updateComponentTitle}
+                clientWindow={this.props.clientWindow}
+                setErrorText={this.props.setErrorText}
+                setSuccessText={this.props.setSuccessText}
+                userToken={this.props.userToken}
+                removeUserToken={this.props.removeUserToken}
+                updateUserToken={this.props.updateUserToken}
+              />
+            }
+          />
+          <Route path={"/squad/:shortId"}
             render={() =>
               <SquadLobby
                 componentTitle={this.props.componentTitle}
@@ -92,9 +150,9 @@ class App extends Component {
               />
             }
           />
-          <Route component={ErrorPage} />
+          <Route path={"*"} component={ErrorPage} />
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 
@@ -116,7 +174,7 @@ class App extends Component {
       <span>
         <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)} >
           <span>
-            {this.renderErrorAlert()}
+            {this.renderAlert()}
             {this.props.userToken ? this.renderApp() : this.renderWelcome() }
           </span>
         </MuiThemeProvider>
@@ -131,6 +189,7 @@ function mapStateToProps(state) {
     clientWindow: state.clientWindow,
     userToken: state.userToken,
     errorText: state.errorText,
+    successText: state.successText,
     componentTitle: state.componentTitle
   };
 }
@@ -142,7 +201,10 @@ function mapDispatchToProps(dispatch) {
     getUserToken,
     setErrorText,
     clearErrorText,
-    updateComponentTitle
+    setSuccessText,
+    clearSuccessText,
+    updateComponentTitle,
+    removeUserToken
   }, dispatch)
 }
 

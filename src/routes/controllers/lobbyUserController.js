@@ -11,16 +11,20 @@ import mongoose, { Types } from 'mongoose';
 const createLobby = ( req, res, done ) => {
   const lobbyOwner = req.user;
   const lobby = req.body;
+  // Default settings
+  const vtsEnabled = lobby.settings ? lobby.settings.voteToSkip.voteToSkipEnabled : false;
+  const requiredVTS = lobby.settings ? lobby.settings.voteToSkip.requiredVotesToSkip :  0;
+  const hideVP = lobby.settings ? lobby.settings.hideVideoPlayer : false;
 
   // Create new lobby object
   const newLobby = new Lobby({
     lobbyName: lobby.lobbyName,
     settings: {
       voteToSkip: {
-        voteToSkipEnabled: lobby.settings.voteToSkip.voteToSkipEnabled,
-        requiredVotesToSkip: lobby.settings.voteToSkip.requiredVotesToSkip
+        voteToSkipEnabled: vtsEnabled,
+        requiredVotesToSkip: requiredVTS
       },
-      hideVideoPlayer: lobby.settings.hideVideoPlayer
+      hideVideoPlayer: hideVP
     },
     users: {
       ownerId: lobbyOwner._id,
@@ -31,19 +35,19 @@ const createLobby = ( req, res, done ) => {
     playlist: []
   })
   newLobby.save().then(lobby => {
-    // Save the new lobby in the user.lobbiesJoined
+    // This will save the new lobby in the user.lobbiesJoined
     User.findById({ _id: lobbyOwner._id }).exec().then(foundUser => {
-      const newLobby = { _id: lobby._id, lobbyName: lobby.lobbyName };
+      const newLobby = { _id: lobby._id, shortId: lobby.shortId, lobbyName: lobby.lobbyName };
       // Add new lobby to user.lobbiesOwned
       foundUser.lobbiesOwned = [...foundUser.lobbiesOwned, newLobby];
       // Update user object
       User.findOneAndUpdate({ _id: lobbyOwner._id }, foundUser).exec().then(user => {
         // Respond with success message and lobbyId
-        return res.json({success: true, message: `Lobby ${lobby.lobbyName} successfully created by ${user.userName}`, lobbyId: lobby._id, shortId: lobby.shortId});
-      }).catch(err => done('Lobby was created but did not save to the user.'));
-    }).catch((err) => done(`Could not find ${user.Username}, so ${lobby.lobbyName} could not be saved to their joined lobbies.`));
+        return res.json({success: true, message: `${lobby.lobbyName} successfully created.`, lobbyId: lobby._id, shortId: lobby.shortId});
+      }).catch(err => done('Squad was created but user was not updated.'));
+    }).catch((err) => done(`${user.Username} not found, so ${lobby.lobbyName} not saved to squads.`));
   })
-  .catch(err => done(`Could not save lobby ${newLobby.lobbyName}.`));
+  .catch(err => done(`Could not save squad ${newLobby.lobbyName}.`));
 }
 
 // Make sure user is the owner before deleting lobby
@@ -53,28 +57,28 @@ const createLobby = ( req, res, done ) => {
 // Return success message and updated user
 const deleteLobby = ( req, res, done ) => {
   const userId = req.user._id.toJSON();
-  Lobby.findById({ _id: req.params.lobby_id }).exec().then( (lobby) => {
+  Lobby.findById({ _id: req.params.lobby_id }).exec().then( lobby => {
     const isOwner = (lobby.users.ownerId.toJSON() === userId);
 
     if (isOwner) {
       // Delete lobby from DB if user is the lobby owner
-      Lobby.findByIdAndRemove({ _id: req.params.lobby_id }).then(() => {
-        return console.log({ success: true, message: `${req.user.userName} has successfully deleted ${lobby.lobbyName}.` });
+      Lobby.findByIdAndRemove({ _id: lobby._id }).then(() => {
+        return console.log(`${req.user.userName} has successfully deleted ${lobby.lobbyName}.`);
       }).catch(err => done(`Error deleting lobby ${lobby.lobbyName}`));
       // Delete the lobby object from the user.lobbiesOwned
       User.findById({ _id: userId }).exec().then(foundUser => {
         const lobbiesOwnedMap = foundUser.lobbiesOwned.map(mappedLobby => mappedLobby._id.toJSON());
-        const indexOfOwnedLobby = lobbiesOwnedMap.indexOf(req.params.lobby_id);
+        const indexOfOwnedLobby = lobbiesOwnedMap.indexOf(lobby._id.toJSON());
         const lobbyExists = indexOfOwnedLobby >= 0;
-        const successResponse = res.json({ success: true, message: `Lobby ${lobby.lobbyName} has been deleted from ${req.user.userName}'s owned lobbies. It has also been deleted permanently.'`, user: foundUser });
+        const successResponse = res.json({ success: true, message: `${lobby.lobbyName} successfully deleted.`, user: foundUser });
         // If the lobby exists in the user's lobbiesOwned array
-        // Remove the deleted lobby object from the user.lobbiesOwned
+        // Remove the lobby object from the user.lobbiesOwned
         // Update user and return success response
         if (lobbyExists) {
           foundUser.lobbiesOwned.splice(indexOfOwnedLobby, 1);
           User.findOneAndUpdate({ _id: userId }, foundUser)
           .then(user => successResponse)
-          .catch(err => done(`Error deleting lobby ${lobby.lobbyName} from user ${req.user.userName}'s owned lobbies.'`));
+          .catch(err => done(`Error deleting lobby ${lobby.lobbyName} from ${req.user.userName}'s owned lobbies.'`));
         } else {
           return successResponse;
         }
@@ -92,51 +96,39 @@ const deleteLobby = ( req, res, done ) => {
 // Respond with success message and updated lobby
 const joinLobby = ( req, res, done ) => {
   const user = req.user;
-  Lobby.findOne({ _id: req.params.lobby_id }).exec().then(lobby => {
+  const shortId = req.params.shortId;
+  Lobby.findOne({ shortId }).exec().then(lobby => {
     const joinedUsersArray = lobby.users.joined.map(user => user._id.toJSON());
     const bannedUsersArray = lobby.users.bannedUsers.map(user => user._id.toJSON());
     const isJoined = joinedUsersArray.indexOf(user._id.toJSON()) >= 0;
     const isBanned = bannedUsersArray.indexOf(user._id.toJSON()) >= 0;
+    const isOwner = req.user._id.toString() === lobby.users.ownerId.toString();
 
-    // If the user is in lobby, check to see if the name has changed
-    // If the name has changed, update it in user.lobbiesJoined
-    if (isJoined) {
-      User.findById({ _id: user._id }).exec().then(foundUser => {
-        const lobbiesJoinedIds = foundUser.lobbiesJoined.map(lobby => lobby._id.toJSON());
-        const joinedLobbyIndex = lobbiesJoinedIds.indexOf(lobby._id.toJSON());
+    // If the user is the owner of the lobby, return error message
+    if (isOwner) return done(`You already own ${lobby.lobbyName}.`);
 
-        const hasLobbyNameChanged = foundUser.lobbiesJoined[joinedLobbyIndex].lobbyName !== lobby.lobbyName;
-
-        if (hasLobbyNameChanged) {
-          foundUser.lobbiesJoined[joinedLobbyIndex].lobbyName = lobby.lobbyName;
-          User.findOneAndUpdate({ _id: user._id }, foundUser).exec().catch((err) => done(`Couldn't update joined lobby name because the user was not found.`));
-        }
-
-      })
-      return done('You are already in this lobby!', false);
-    }
-    if (isBanned) return done('You have been banned from this lobby.', false);
+    if (isBanned) return done('You have been banned from this squad.', false);
 
     // Add user to the modifiedLobby array lobby.users.joined
     let modifiedLobby = lobby;
     modifiedLobby.users.joined = [...modifiedLobby.users.joined, {_id: Types.ObjectId(user._id), userName: user.userName}];
 
-    // Update lobby with modified lobby
-    Lobby.findOneAndUpdate({ _id: req.params.lobby_id }, modifiedLobby).exec().catch((err) => done(err, false))
-
-
     // Add lobbyId to user.joinedLobbies
     let modifiedUser = user;
     modifiedUser.lobbiesJoined = [...modifiedUser.lobbiesJoined, {
-      _id: Types.ObjectId(req.params.lobby_id),
+      _id: Types.ObjectId(lobby.lobby_id),
+      shortId,
       lobbyName: lobby.lobbyName
     }]
 
+    // Update lobby with modified lobby
+    Lobby.findOneAndUpdate({ shortId }, modifiedLobby).exec().catch((err) => done('Error trying to add you to squad user list.', false))
+
     // Now update the User object with a new joined lobbyId
     User.findOneAndUpdate({ _id: user._id }, modifiedUser).exec().then(user => res.json({ success: true, message: `${user.userName} succesfully joined ${lobby.lobbyName}!`, lobby: modifiedLobby }))
-    .catch((err) => done(`Couldn't add lobby to your joined lobbies list because your account couldn't be found.`))
+    .catch((err) => done(`Couldn't add squad to your joined squads list because your account couldn't be found.`))
 
-  }).catch((err) => done(`Couldn't join lobby because it does not exist!`));
+  }).catch((err) => done(`Squad does not exist!`));
 }
 
 // Check if user from token is the owner of queried lobby
@@ -277,22 +269,20 @@ const queueSong = ( req, res, done ) => {
 // Find lobby by id but if it doesn't exist,
 // Remove the lobby from user.lobbiesJoined and return success message
 // If the loby exists, you can only leave if you ARE NOT the owner
-// If the user IS the owner of the lobby, return error message
-// Remove user from lobby object
-// Remove lobby from users object
-// Return success message and updated user
+// Remove user from lobby object and remove lobby from user object
+// Return success message with updated user
 const leaveLobby = ( req, res, done ) => {
-  const lobbyId = req.params.lobby_id;
+  const shortId = req.params.shortId;
   const user = req.user;
   function removeLobbyFromUser(){
-    // Check user.joinedLobbies for queried lobbyId
+    // Check user.joinedLobbies for queried shortId
     User.findById({ _id: user._id }).exec().then(foundUser => {
-      const lobbyIdMap = foundUser.lobbiesJoined.map(lobby => lobby._id.toJSON());
-      const indexOfJoinedLobby = lobbyIdMap.indexOf(lobbyId);
+      const shortIdMap = foundUser.lobbiesJoined.map(lobby => lobby.shortId);
+      const indexOfJoinedLobby = shortIdMap.indexOf(shortId);
       const userHasJoinedLobby = (indexOfJoinedLobby >= 0);
       const lobbyName = foundUser.lobbiesJoined[indexOfJoinedLobby].lobbyName;
 
-      // If the user has this lobbyId in their joinedLobbies, remove it
+      // If the user has this shortId in their joinedLobbies, remove it
       if (userHasJoinedLobby) {
         // Remove lobby from user.joinedLobbies
         foundUser.lobbiesJoined.splice(indexOfJoinedLobby, 1);
@@ -301,7 +291,7 @@ const leaveLobby = ( req, res, done ) => {
 
         return res.json({success: true, message: `You have successfully left ${lobbyName}.`, user: foundUser});
       } else {
-        // If the user doesn't have this lobbyId in ther joinedLobbies
+        // If the user doesn't have this shortId in ther joinedLobbies
         // Return error message
         return done(`You dont have this lobby saved in your joined lobbies.`)
       }
@@ -309,27 +299,25 @@ const leaveLobby = ( req, res, done ) => {
   }
 
   // Check to see if the lobby exists
-  Lobby.findById({ _id: lobbyId }).exec().then(foundLobby => {
+  Lobby.findOne({ shortId }).exec().then(foundLobby => {
     // Lobby exists, continue on
     const joinedUserMap = foundLobby.users.joined.map(user => user._id.toJSON());
     const indexOfUser = joinedUserMap.indexOf(user._id.toJSON());
-    const lobbyHasUserJoined = indexOfUser >= 0;
+    const userExistsInLobby = indexOfUser >= 0;
     const isLobbyOwner = user._id.toJSON() === foundLobby.users.ownerId.toJSON();
 
     // If the user is the lobbyOwner, return error message
     if (isLobbyOwner) return done(`You cannot leave the lobby you own, you must delete it.`)
 
     // If the user is in the lobby.users.joined, remove user
-    // Update lobby
-    if (lobbyHasUserJoined) {
+    if (userExistsInLobby) {
       foundLobby.users.joined.splice(indexOfUser, 1);
       // Update lobby
-      Lobby.findOneAndUpdate({ _id: lobbyId }, foundLobby).exec()
+      Lobby.findOneAndUpdate({ shortId }, foundLobby).exec()
       .catch((err) => done(`Cannot remove user ${user.userName} from lobby ${foundLobby.lobbyName}.`, false));
     }
-    // Remove the lobby object from user.lobbiesJoined
-    removeLobbyFromUser();
-  }).catch((err) => {
+  })
+  .then(removeLobbyFromUser()).catch((err) => {
     // If the lobby doesn't exist
     // Remove lobby object from users.lobbiesJoined
     removeLobbyFromUser();

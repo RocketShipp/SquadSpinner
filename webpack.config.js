@@ -3,7 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
-  entry: './client/index',
+  entry: './client',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -12,7 +12,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js)$/, loader: 'babel-loader',
+        test: /\.(js)$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
         query: { presets: ['es2015', 'stage-0', 'react'] }
       },

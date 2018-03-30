@@ -40,6 +40,20 @@ export const clearErrorText = () => {
   }
 };
 
+export const setSuccessText = (payload) => {
+  return {
+    type: 'SET_SUCCESS_TEXT',
+    payload
+  }
+};
+
+export const clearSuccessText = () => {
+  return {
+    type: 'CLEAR_SUCCESS_TEXT',
+    payload: false
+  }
+};
+
 export const updateComponentTitle = (payload) => {
   return {
     type: 'UPDATE_COMPONENT_TITLE',

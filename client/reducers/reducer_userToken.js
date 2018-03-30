@@ -9,7 +9,7 @@ export default function(state = localStorage.getItem('authorization') || null, a
       break;
     case 'REMOVE_USER_TOKEN':
       localStorage.removeItem('authorization');
-      return state;
+      return null;
       break;
   }
   return state;

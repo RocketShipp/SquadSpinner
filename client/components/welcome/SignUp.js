@@ -59,6 +59,7 @@ class SignUp extends Component {
               fullWidth={true}
               onChange={(event) => this.handleChange(event)}
               value={this.state.userName}
+              maxLength={12}
             />
             <TextField
               name="email"

@@ -3,8 +3,7 @@ import {Link} from 'react-router-dom';
 import {Container, Row, Col} from 'react-grid-system';
 import {Card, CardTitle} from 'material-ui/Card';
 import DashToolbar from './dashToolbar';
-import $ from 'jquery';
-import './stylesheets/dashToolbar.scss';
+import './stylesheets/dash.scss';
 
 const toolbarHeight = 56;
 
@@ -27,7 +26,7 @@ class Dashboard extends Component {
           <Row style={{width: '100%', textAlign: 'center'}}>
             <Col xs={6} md={4} offset={{md: 2}}>
               <Card className="dashCard">
-                <Link to="/">
+                <Link to="/joinsquad">
                   <i className="material-icons dashIcon">add_circle</i>
                 </Link>
                 <CardTitle
@@ -41,7 +40,7 @@ class Dashboard extends Component {
             </Col>
             <Col xs={6} md={4}>
               <Card className="dashCard">
-                <Link to="/">
+                <Link to="/createsquad">
                   <i className="material-icons dashIcon">mode_edit</i>
                 </Link>
                 <CardTitle
@@ -55,7 +54,7 @@ class Dashboard extends Component {
             </Col>
             <Col xs={6} md={4} offset={{md: 2}}>
               <Card className="dashCard">
-                <Link to="/">
+                <Link to="/mysquads">
                   <i className="material-icons dashIcon">people</i>
                 </Link>
                 <CardTitle
@@ -69,8 +68,8 @@ class Dashboard extends Component {
             </Col>
             <Col xs={6} md={4}>
               <Card className="dashCard">
-                <Link to="/">
-                  <i className="material-icons dashIcon">settings</i>
+                <Link to="/account">
+                  <i className="material-icons dashIcon">account_circle</i>
                 </Link>
                 <CardTitle
                   title="Account"

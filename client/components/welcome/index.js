@@ -56,7 +56,7 @@ class Welcome extends Component {
           .then(res => {
             if (res.data.success) {
               this.props.updateUserToken(res.data.token);
-              this.props.clearErrorText();
+              this.props.setSuccessText('Successfully signed up!')
             } else {
               this.props.setErrorText(res.data.message);
             }
@@ -78,7 +78,7 @@ class Welcome extends Component {
           .then(res => {
             if (res.data.success) {
               this.props.updateUserToken(res.data.token);
-              this.props.clearErrorText();
+              this.props.setSuccessText('Successfully logged in!')
             } else {
               this.props.setErrorText(res.data.message);
             }

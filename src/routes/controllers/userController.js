@@ -43,13 +43,13 @@ const getUser = ( req, res, err ) => {
 // Update user in the DB
 // Return success message and new token
 const defaultEditUser = ( req, res, done ) => {
-  const userId = req.params.user_id;
-  const set = req.body;
+  const userId = req.user._id.toJSON();
+  const userName = req.user.userName;
 
   // Find user by given ID
   User.findById({ _id: userId }).exec().then(user => {
     // Edit user property of userName
-    user.userName = set.userName || user.userName;
+    user.userName = req.body.userName || user.userName;
     // If userId from the token matches the userId in the params
     // Pass updated user to next promise
     return ( userId === user._id.toJSON() ) ? user :
@@ -60,7 +60,7 @@ const defaultEditUser = ( req, res, done ) => {
     User.findOneAndUpdate({ _id: userId }, updatedUser).exec()
     .then(() => {
       console.log(`User ${updatedUser.userName} successfully updated at ${new Date()}.`);
-      return res.json({ success: true, token: tokenForUser(updatedUser) });
+      return res.json({ success: true, token: tokenForUser(updatedUser), message: `You are now ${updatedUser.userName}` });
     })
     .catch(err => done(`Error updating user ${user.userName}.`));
   })

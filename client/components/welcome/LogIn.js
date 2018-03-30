@@ -4,6 +4,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Card, CardTitle} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 
+const toolbarHeight = 56;
+
 class LogIn extends Component {
 
   constructor() {
@@ -36,7 +38,7 @@ class LogIn extends Component {
         className="viewCol"
         style={{
           textAlign: 'center',
-          maxHeight: this.props.clientHeight - this.props.toolbarHeight,
+          maxHeight: this.props.clientHeight - toolbarHeight,
           overflowY: 'scroll'
         }}
       >

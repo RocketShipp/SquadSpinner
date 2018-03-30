@@ -5,17 +5,19 @@ const saltRounds = parseInt(process.env.SALTROUNDS);
 
 const UserSchema = new Mongoose.Schema ({
   email: { type: String, required: true, unique: true },
-  userName: { type: String, required: true, unique: true },
+  userName: { type: String, required: true, unique: false },
   password: { type: String, required: true },
   lobbiesJoined: [
     {
       _id: { type: Schema.Types.ObjectId, required: true },
+      shortId: { type: String, required: true },
       lobbyName: { type: String, required: true }
     }
   ],
   lobbiesOwned: [
     {
       _id: { type: Schema.Types.ObjectId, required: true },
+      shortId: { type: String, required: true },
       lobbyName: { type: String, required: true }
     }
   ],

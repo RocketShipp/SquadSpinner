@@ -12,28 +12,24 @@ const authStrategy = Passport.authenticate('authStrategy', {
   failureRedirect: '/'
 });
 
-let test = () => {
-  return console.log('test')
-}
-
 export default (router) => {
   // User Routes
   router.post('/login', signInStrategy, userController.defaultLogin);
   router.post('/signup', userController.defaultSignup);
   router.post('/getUser', authStrategy, userController.getUser);
-  router.put('/editUser/:user_id', authStrategy, userController.defaultEditUser);
+  router.put('/editUser', authStrategy, userController.defaultEditUser);
 
   // Lobby Routes
-  router.get('/getLobby/:lobby_shortId', authStrategy, lobbyController.getLobby);
+  router.post('/getLobby/:shortId', authStrategy, lobbyController.getLobby);
   router.put('/updateLobbySettings/:lobby_id', authStrategy, lobbyController.updateLobbySettings);
-  router.get('/removeSong/:song_id/fromLobby/:lobby_id', authStrategy, lobbyController.removeSong);
+  router.post('/removeSong/:song_id/fromLobby/:lobby_id', authStrategy, lobbyController.removeSong);
 
   // Lobby User Routes
-  router.get('/joinLobby/:lobby_id', authStrategy, lobbyUserController.joinLobby);
+  router.post('/joinLobby/:shortId', authStrategy, lobbyUserController.joinLobby);
   router.post('/createLobby', authStrategy, lobbyUserController.createLobby);
   router.delete('/deleteLobby/:lobby_id', authStrategy, lobbyUserController.deleteLobby);
-  router.get('/banUser/:user_id/fromLobby/:lobby_id', authStrategy, lobbyUserController.banUser);
-  router.get('/unbanUser/:user_id/fromLobby/:lobby_id', authStrategy, lobbyUserController.unbanUser);
+  router.post('/banUser/:user_id/fromLobby/:lobby_id', authStrategy, lobbyUserController.banUser);
+  router.post('/unbanUser/:user_id/fromLobby/:lobby_id', authStrategy, lobbyUserController.unbanUser);
   router.put('/queueSong/:lobby_id', authStrategy, lobbyUserController.queueSong);
-  router.get('/leaveLobby/:lobby_id', authStrategy, lobbyUserController.leaveLobby);
+  router.post('/leaveLobby/:shortId', authStrategy, lobbyUserController.leaveLobby);
 }

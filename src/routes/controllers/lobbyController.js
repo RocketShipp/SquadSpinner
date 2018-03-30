@@ -3,7 +3,7 @@ import Lobby from '../../models/LobbyModel';
 
 // With given 'lobbyId' request params, return lobby from DB
 const getLobby = ( req, res, done ) => {
-  Lobby.findOne({ shortId: req.params.lobby_shortId }).exec().then(( lobby ) => {
+  Lobby.findOne({ shortId: req.params.shortId }).exec().then(( lobby ) => {
     if ( lobby === null ) {
       return done(`This lobby doesn't exist or has been deleted.`);
     } else {
