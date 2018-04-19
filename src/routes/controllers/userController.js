@@ -15,7 +15,9 @@ const defaultLogin = ( req, res ) => {
 // If email already exists in DB, fail
 // Save user in DB and return token
 const defaultSignup = ( req, res, done ) => {
-  const { email, userName, password } = req.body;
+  let { email, userName, password } = req.body;
+  const lowerCaseEmail = email.toLowerCase();
+  email = lowerCaseEmail;
   const newUser = new User({ email, userName, password });
 
   // Handle missing email, username or password

@@ -11,7 +11,7 @@ const signInStrategy = new LocalStrategy({
   passwordField: 'password'
 },
 (email, password, done) => {
-  User.findOne({ email }).exec().then( user => {
+  User.findOne({ email: email.toLowerCase() }).exec().then( user => {
 
     // If there is no user, return done()
     if (!user) return done(`${email} not found in records`);
