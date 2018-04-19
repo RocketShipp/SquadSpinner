@@ -1,29 +1,32 @@
-.menuItem {
-  div {
-    margin-bottom: .5rem;
-    div {
-      padding: 0 !important;
-    }
-  }
-}
 .drawerContents {
   text-align: center !important;
-}
-.drawerContents > div > div {
-  clear: both;
-  overflow: hidden;
-}
-.dialogAppBar {
-  h1 {
-    color: white !important;
-    font-weight: bold;
+  & > div > div {
+    clear: both;
+    overflow: hidden;
   }
-  .closeButton {
-    font-size: 2rem;
-    padding: .5rem 0 !important;
-    box-shadow: none !important;
-    button {
-      color: white;
+  .dialogAppBar {
+    background-color: transparent !important;
+    h1 {
+      color: white !important;
+      font-weight: bold;
+    }
+    .closeButton {
+      font-size: 2rem;
+      padding: .5rem !important;
+      box-shadow: none !important;
+      height: 50px;
+      width: 50px;
+      button {
+        color: white;
+      }
+    }
+  }
+  .menuItem {
+    div {
+      margin: .25rem 0 .25rem 0;
+      div {
+        padding: 0 !important;
+      }
     }
   }
 }

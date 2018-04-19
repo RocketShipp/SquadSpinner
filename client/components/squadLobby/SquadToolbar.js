@@ -3,23 +3,13 @@ import IconButton from 'material-ui/IconButton';
 import {Toolbar, ToolbarTitle} from 'material-ui/Toolbar';
 import './stylesheets/squadToolbar.scss';
 
-const styles = {
-  iconButton: {
-    height: 'auto',
-    width: 'auto'
-  },
-  toolbarTitle: {
-    textAlign: 'center',
-    width: '100%'
-  }
-}
-
 const SquadToolbar = (props) => {
     return (
-      <Toolbar className="myToolbar">
+      <Toolbar
+        className="squadToolbar"
+      >
         <IconButton
           className="menuIcon"
-          style={styles.iconButton}
           onClick={props.drawerToggle}
         >
           <i className="material-icons">menu</i>
@@ -28,7 +18,6 @@ const SquadToolbar = (props) => {
           float="center"
           className="toolbarTitle"
           text={props.squadName}
-          style={styles.toolbarTitle}
         />
       </Toolbar>
     )

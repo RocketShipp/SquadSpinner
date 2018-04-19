@@ -8,27 +8,11 @@ import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import DropDownMenu from 'material-ui/dropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
 const colors = require('material-ui/styles/colors');
 import {Link} from 'react-router-dom';
 import $ from 'jquery';
 import './stylesheets/createSquad.scss';
-
-const toolbarHeight = 56;
-
-const styles = {
-  iconButton: {
-    height: 'auto',
-    width: 'auto',
-    zIndex: '1'
-  },
-  toolbarTitle: {
-    textAlign: 'center',
-    width: '100%',
-    position: 'fixed',
-    zIndex: '0'
-  }
-}
 
 class CreateSquad extends Component {
   constructor() {
@@ -60,30 +44,25 @@ class CreateSquad extends Component {
 
   renderrequiredVotesToSkip() {
     return (
-      <div id="requiredVotesToSkip" style={{
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
-      <p>How many votes?</p>
-      <p>{this.state.requiredVotesToSkip}</p>
-      <DropDownMenu
-        disabled={!this.state.voteToSkipEnabled}
-        underlineStyle={{color: 'transparent'}}
-        style={{marginTop: '-25px', marginRight: '-20px'}}
-      >
-        <MenuItem value={1} primaryText="1" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={2} primaryText="2" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={3} primaryText="3" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={4} primaryText="4" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={5} primaryText="5" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={6} primaryText="6" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={7} primaryText="7" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={8} primaryText="8" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={9} primaryText="9" onClick={(event) => this.handleDropDownItemClick(event)} />
-        <MenuItem value={10} primaryText="10" onClick={(event) => this.handleDropDownItemClick(event)} />
-      </DropDownMenu>
+      <div id="requiredVotesToSkip">
+        <p>How many votes?</p>
+        <p>{this.state.requiredVotesToSkip}</p>
+        <DropDownMenu
+          disabled={!this.state.voteToSkipEnabled}
+          underlineStyle={{color: 'transparent'}}
+          style={{marginTop: '-25px', marginRight: '-20px'}}
+        >
+          <MenuItem value={1} primaryText="1" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={2} primaryText="2" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={3} primaryText="3" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={4} primaryText="4" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={5} primaryText="5" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={6} primaryText="6" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={7} primaryText="7" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={8} primaryText="8" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={9} primaryText="9" onClick={(event) => this.handleDropDownItemClick(event)} />
+          <MenuItem value={10} primaryText="10" onClick={(event) => this.handleDropDownItemClick(event)} />
+        </DropDownMenu>
       </div>
     )
   }
@@ -138,7 +117,6 @@ class CreateSquad extends Component {
         <Toolbar className="myToolbar">
           <IconButton
             className="menuIcon"
-            style={styles.iconButton}
           >
             <Link to="/"><i className="material-icons">arrow_back</i></Link>
           </IconButton>
@@ -146,26 +124,15 @@ class CreateSquad extends Component {
             float="center"
             className="toolbarTitle"
             text={this.props.componentTitle}
-            style={styles.toolbarTitle}
           />
         </Toolbar>
         <Container fluid={true}
           className="createSquadContainer"
-          style={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            paddingLeft: 'none',
-            paddingRight: 'none',
-            height: (this.props.clientWindow.height - toolbarHeight)
-        }}>
-          <Row style={{width: '100%', textAlign: 'center', padding: '0', margin: 'auto'}}>
+          style={{ height: (this.props.clientWindow.height) }}>
+          <Row className="createSquadRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
-              style={{
-                textAlign: 'center'
-              }}
             >
               <Card className="createSquadCard" style={{textAlign: 'left'}}>
                 <TextField
@@ -176,16 +143,6 @@ class CreateSquad extends Component {
                   onChange={(event) => this.handleChange(event)}
                   value={this.state.squadName}
                 />
-                <Toggle
-                  className="enableVote"
-                  label="Enable voting to skip songs?"
-                  thumbSwitchedStyle={{backgroundColor: colors.blue900}}
-                  trackSwitchedStyle={{backgroundColor: colors.grey500}}
-                  toggled={this.state.voteToSkipEnabled}
-                  onToggle={ () => this.setState({voteToSkipEnabled: !this.state.voteToSkipEnabled}) }
-                />
-                // If voteToSkipEnabled is true, show the dropdown trigger
-                {this.state.voteToSkipEnabled ? this.renderrequiredVotesToSkip() : null}
                 <Toggle
                   className="hideVideoPlayer"
                   label="Hide video player?"

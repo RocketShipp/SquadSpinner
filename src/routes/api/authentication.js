@@ -21,8 +21,9 @@ export default (router) => {
 
   // Lobby Routes
   router.post('/getLobby/:shortId', authStrategy, lobbyController.getLobby);
-  router.put('/updateLobbySettings/:lobby_id', authStrategy, lobbyController.updateLobbySettings);
-  router.post('/removeSong/:song_id/fromLobby/:lobby_id', authStrategy, lobbyController.removeSong);
+  router.put('/updateLobbySettings/:shortId', authStrategy, lobbyController.updateLobbySettings);
+  router.put('/updateLobbyPlaylist/:shortId', authStrategy, lobbyController.updateLobbyPlaylist);
+  router.put('/removeSong/:song_id/fromSquad/:shortId', authStrategy, lobbyController.removeSong);
 
   // Lobby User Routes
   router.post('/joinLobby/:shortId', authStrategy, lobbyUserController.joinLobby);
@@ -30,6 +31,6 @@ export default (router) => {
   router.delete('/deleteLobby/:lobby_id', authStrategy, lobbyUserController.deleteLobby);
   router.post('/banUser/:user_id/fromLobby/:lobby_id', authStrategy, lobbyUserController.banUser);
   router.post('/unbanUser/:user_id/fromLobby/:lobby_id', authStrategy, lobbyUserController.unbanUser);
-  router.put('/queueSong/:lobby_id', authStrategy, lobbyUserController.queueSong);
+  router.put('/queueSong/:shortId', authStrategy, lobbyUserController.queueSong);
   router.post('/leaveLobby/:shortId', authStrategy, lobbyUserController.leaveLobby);
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Col} from 'react-grid-system';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
 import {SSLogo} from '../../resources';
 
 
@@ -10,11 +10,7 @@ const DefaultView = (props) => {
       xs={12} lg={10}
       offset={{lg:1}}
       className="viewCol"
-      style={{
-        textAlign: 'center',
-        maxHeight: props.clientHeight - props.toolbarHeight,
-        overflowY: 'scroll'
-      }}
+      style={{ maxHeight: props.clientHeight }}
     >
       <p className="defaultViewSlogan">The Party Playlister</p>
       <Col

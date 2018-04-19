@@ -1,39 +1,70 @@
-html {
-  height: 100%;
-  body {
-    background-color: black;
-    height: 100%;
-    #root {
-      height: 100%;
-    }
-  }
-}
-.bottomControlsContainer {
+.bottomToolbarContainer {
   padding: .3rem;
   height: 3rem;
+  width: 100%;
   z-index: 100;
+  text-align: center;
+  color: white !important;
+  justify-content: center !important;
+  bottom: 0;
+  position: fixed;
   i {
     font-size: 2rem;
   }
-}
-.cardHeader {
-  div {
-    padding: 0 !important;
+  .iconButton {
+    height: auto;
+    width: auto;
+    color: white !important;
   }
 }
-#noItemsInPlaylist {
-  font-size: 1.5rem;
-}
-.playlistContainer {
-  margin-bottom: 3.5rem;
-}
-.resultText {
-  font-style: italic;
-  font-weight: bold;
+.innerContentContainer {
+  height: 100%;
+  .innerContentRow {
+    height: 100%;
+    align-items: center !important;
+    .innerContentTopCol {
+      padding: 56px 0 !important;
+      .cardActions {
+        text-align: center;
+      }
+    }
+    .innerContentCol {
+      height: 100vh !important;
+      padding: 56px 0 !important;
+      text-align: center;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      .noItemsCard {
+        width: 100%;
+        & > div {
+          padding-bottom: 0 !important;
+        }
+        #noItemsInPlaylist {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
 }
 .squadDialog {
   padding-top: 0 !important;
-  .dialogBody::-webkit-scrollbar {
-    display: none;
+  .dialogBody {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .dialogResultCol {
+      margin-top: 10px;
+      .dialogResult {
+        cursor: pointer;
+      }
+    }
+  }
+  .closeDialogButton {
+    color: white !important;
+    background-color: red !important;
+    &:hover {
+      background-color: darkred !important;
+    }
   }
 }

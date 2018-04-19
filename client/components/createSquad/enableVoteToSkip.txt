@@ -1,0 +1,12 @@
+***Add this back in to index.js when vote to skip functionality is complete***
+
+<Toggle
+  className="enableVote"
+  label="Enable voting to skip songs?"
+  thumbSwitchedStyle={{backgroundColor: colors.blue900}}
+  trackSwitchedStyle={{backgroundColor: colors.grey500}}
+  toggled={this.state.voteToSkipEnabled}
+  onToggle={ () => this.setState({voteToSkipEnabled: !this.state.voteToSkipEnabled}) }
+/>
+// If voteToSkipEnabled is true, show the dropdown trigger
+{this.state.voteToSkipEnabled ? this.renderrequiredVotesToSkip() : null}

@@ -10,8 +10,6 @@ import LogInView from './LogIn';
 import AboutView from './About';
 import './stylesheets/welcome.scss';
 
-const toolbarHeight = 56;
-
 class Welcome extends Component {
 
   // activeView is what determines whether the Sign Up screen is shown, or the Log In screen is shown
@@ -84,7 +82,7 @@ class Welcome extends Component {
             }
           })
           .catch(err => {
-            console.log(err);
+            this.props.setErrorText(res.message)
           })
         break;
     }
@@ -95,7 +93,6 @@ class Welcome extends Component {
       case null:
         return (
           <DefaultView
-            toolbarHeight={toolbarHeight}
             clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
           />
@@ -104,7 +101,6 @@ class Welcome extends Component {
       case 'SIGN_UP':
         return (
           <SignUpView
-            toolbarHeight={toolbarHeight}
             clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
             handleSignUp={this.handleSignUp.bind(this)}
@@ -114,7 +110,6 @@ class Welcome extends Component {
       case 'LOG_IN':
         return (
           <LogInView
-            toolbarHeight={toolbarHeight}
             clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
             handleLogin={this.handleLogin.bind(this)}
@@ -124,7 +119,6 @@ class Welcome extends Component {
       case 'ABOUT':
         return (
           <AboutView
-            toolbarHeight={toolbarHeight}
             clientHeight={this.props.clientWindow.height}
             setView={this.setView.bind(this)}
           />
@@ -139,15 +133,11 @@ class Welcome extends Component {
         <WelcomeToolbar
           componentTitle={this.props.componentTitle}
         />
-        <Container fluid={true} style={{
-          height: (this.props.clientWindow.height - toolbarHeight),
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center',
-          paddingLeft: 'none',
-          paddingRight: 'none'
-        }}>
-          <Row style={{width: '100%'}}>
+        <Container
+          className="welcomeInner"
+          fluid={true}
+        >
+          <Row className="welcomeInnerRow" style={{height: this.props.clientWindow.height}}>
             {this.renderActiveView()}
           </Row>
         </Container>

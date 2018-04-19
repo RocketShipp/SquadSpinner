@@ -4,14 +4,43 @@
   font-weight: bold;
   .toolbarTitle {
     font-size: 2rem !important;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    z-index: 0;
   }
   span, i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
+    height: auto;
+    width: auto;
+    z-index: 1;
   }
 }
-.accountCard {
-  padding: 1rem;
+.accountSettingsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: auto 0 auto 0;
+  .accountSettingsRow {
+    padding: 0 !important;
+    margin: auto !important;
+    width: 100%;
+    text-align: center;
+    .accountCard {
+      margin-top: 56px !important;
+      padding: 1rem;
+      text-align: center;
+      button {
+        margin-top: 10px !important;
+      }
+    }
+    .logOutButton {
+      bottom: 0;
+      display: absolute;
+      width: 100%;
+    }
+  }
 }

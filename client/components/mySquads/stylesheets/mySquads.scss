@@ -2,38 +2,62 @@
   width: 100% !important;
   padding: 0 !important;
   font-weight: bold;
+  position: fixed;
+  z-index: 5;
   .toolbarTitle {
     font-size: 2rem !important;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
   }
   span, i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
+    height: auto;
+    width: auto;
+    z-index: 2;
   }
 }
 .mySquadsContainer {
+  padding: 56px 0 0 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
   }
-  .topLevelCard {
-    margin: .5rem 0;
-    padding: 1rem;
-    .topCardHeader {
-      padding: 0 !important;
-      & > div > span {
-        margin: .5rem 0 !important;
-        font-size: 1.5rem !important;
-        font-weight: bold !important;
-      }
-      & > div {
+  .mySquadsRow {
+    width: 100%;
+    text-align: center;
+    padding: 0 !important;
+    margin: auto;
+    .cardActions {
+      display: flex;
+      justify-content: center;
+    }
+    .topLevelCard {
+      margin: .5rem 0;
+      padding: 1rem;
+      text-align: center;
+      .topCardHeader {
         padding: 0 !important;
+        & > div > span {
+          margin: .5rem 0 !important;
+          font-size: 1.5rem !important;
+          font-weight: bold !important;
+        }
+        & > div {
+          padding: 0 !important;
+        }
       }
     }
   }
   .squadCard {
     margin-bottom: .5rem;
+    text-align: center;
     &:last-of-type {
       margin-bottom: 0;
     }

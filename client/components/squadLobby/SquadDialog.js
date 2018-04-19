@@ -4,32 +4,30 @@ import FlatButton from 'material-ui/FlatButton';
 import {Row, Col} from 'react-grid-system';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle} from 'material-ui/Card';
 
-
 class SquadDialog extends Component {
 
   generateResults = (props) => {
     return this.props.results.map(result => {
       return (
         <Col
-          xs={12} md={8} lg={6}
-          offset={{md:2, lg:3}}
-          key={result.url}
-          style={{marginTop: '10px'}}
+          xs={12}
+          key={result.songUrl}
+          className="dialogResultCol"
         >
           <Card
-            key={result.url}
-            style={{cursor: 'pointer'}}
+            key={result.songUrl}
+            className="dialogResult"
             onClick={() => {
               this.props.dialogClose();
               this.props.queueSong({
-                url: result.url,
-                title: result.title,
+                songUrl: result.songUrl,
+                songTitle: result.songTitle,
                 uploader: result.uploader
               });
             }}
           >
             <CardMedia
-              overlay={<CardTitle title={result.title} subtitle={`${result.uploader}`} />}
+              overlay={<CardTitle title={result.songTitle} subtitle={`${result.uploader}`} />}
             >
               <img src={result.image} alt="" />
             </CardMedia>
@@ -43,24 +41,21 @@ class SquadDialog extends Component {
     return (
       <Dialog
         title="Results"
+        className="squadDialog"
         titleStyle={{
           fontWeight: 'bold',
           textAlign: 'center'
         }}
         contentStyle={{
-          width: '95%',
-          maxWidth: `${this.props.clientWidth}`
+          width: '100%'
         }}
-        className="squadDialog"
         bodyClassName="dialogBody"
         actions={[
           <FlatButton
             label="Close"
             primary={true}
             onClick={this.props.dialogClose}
-            backgroundColor={'red'}
-            hoverColor={'transparent'}
-            style={{color: 'white'}}
+            className="closeDialogButton"
           />
         ]}
         modal={false}

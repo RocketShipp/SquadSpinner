@@ -6,26 +6,10 @@ import IconButton from 'material-ui/IconButton';
 import {Container, Row, Col} from 'react-grid-system';
 import {Card} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
 const colors = require('material-ui/styles/colors');
 import $ from 'jquery';
 import './stylesheets/joinSquad.scss';
-
-const toolbarHeight = 56;
-
-const styles = {
-  iconButton: {
-    height: 'auto',
-    width: 'auto',
-    zIndex: '1'
-  },
-  toolbarTitle: {
-    textAlign: 'center',
-    width: '100%',
-    position: 'fixed',
-    zIndex: '0'
-  }
-}
 
 class JoinSquad extends Component {
   constructor() {
@@ -75,7 +59,6 @@ class JoinSquad extends Component {
         <Toolbar className="myToolbar">
           <IconButton
             className="menuIcon"
-            style={styles.iconButton}
           >
             <Link to="/"><i className="material-icons">arrow_back</i></Link>
           </IconButton>
@@ -83,28 +66,17 @@ class JoinSquad extends Component {
             float="center"
             className="toolbarTitle"
             text={this.props.componentTitle}
-            style={styles.toolbarTitle}
           />
         </Toolbar>
         <Container fluid={true}
           className="joinSquadContainer"
-          style={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            paddingLeft: 'none',
-            paddingRight: 'none',
-            height: (this.props.clientWindow.height - toolbarHeight)
-        }}>
-          <Row style={{width: '100%', textAlign: 'center', padding: '0', margin: 'auto'}}>
+          style={{ height: (this.props.clientWindow.height) }}>
+          <Row className="joinSquadRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
-              style={{
-                textAlign: 'center'
-              }}
             >
-              <Card className="joinSquadCard" style={{textAlign: 'left'}}>
+              <Card className="joinSquadCard">
                 <TextField
                   id="squadShortID"
                   name="squadShortID"

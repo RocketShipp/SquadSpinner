@@ -1,8 +1,9 @@
 .myToolbar {
   width: 100% !important;
   padding: 0 !important;
-  font-weight: bold;
+  text-align: center;
   .toolbarTitle {
+    padding-right: 0 !important;
     font-size: 2rem !important;
   }
   span, i {
@@ -17,9 +18,13 @@
   align-items: center !important;
   display: flex !important;
   justify-content: center !important;
-  padding: auto 0 !important;
+  padding: 56px 0 0 0 !important;
   &::-webkit-scrollbar {
     display: none;
+  }
+  .dashRow {
+    width: 100%;
+    text-align: center;
   }
 }
 .dashIcon {
@@ -32,15 +37,18 @@
 }
 .dashCard {
   background-color: transparent !important;
-  padding-bottom: 0 !important;
+  padding: 1rem 0 !important;
   > div {
+    padding: 0 !important;
+  }
+  .dashCardTitle {
     padding: 0 !important;
   }
 }
 
 @media(min-width:768px){
   .dashIcon {
-    font-size: 15rem;
+    font-size: 8rem;
   }
   .dashCardTitle span {
     font-size: 3rem !important;
@@ -49,6 +57,6 @@
 }
 @media(min-width:992px){
   .dashCardTitle span {
-    font-size: 4rem !important;
+    font-size: 2rem !important;
   }
 }

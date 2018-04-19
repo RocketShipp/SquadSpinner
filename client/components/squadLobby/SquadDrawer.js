@@ -3,7 +3,7 @@ import './stylesheets/squadDrawer.scss';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
 import {Card, CardActions, CardHeader} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
@@ -12,12 +12,6 @@ const colors = require('material-ui/styles/colors');
 import $ from 'jquery';
 
 const styles = {
-  dialogAppBar: {
-    backgroundColor: 'transparent'
-  },
-  closeButton: {
-    minWidth: '50px'
-  },
   ytInputUnderlineFocus: {
     borderColor: colors.redA700
   },
@@ -28,6 +22,14 @@ const styles = {
 
 class SquadDrawer extends Component {
 
+  constructor(){
+    super();
+    this.state = {
+      ytSearch: '',
+      urlField: ''
+    }
+  }
+
   handleYouTubeSearch = (props) => {
     let apiKey = youtubeKey;
     let term = $('#ytSearchInput').val().replace(/ /g, '+');
@@ -37,8 +39,8 @@ class SquadDrawer extends Component {
           let newResults = [];
           response.items.forEach(item => {
             newResults.push({
-              url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-              title: `${item.snippet.title}`,
+              songUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+              songTitle: `${item.snippet.title}`,
               image: `${item.snippet.thumbnails.medium.url}`,
               uploader: `${item.snippet.channelTitle}`
             })
@@ -52,15 +54,24 @@ class SquadDrawer extends Component {
   };
   handleLink = (props) => {
     let linkValue = $(`.link input`).val();
-    let link = {
-      url: linkValue,
-      title: linkValue,
+    let song = {
+      songUrl: linkValue,
+      songTitle: linkValue,
       uploader: ''
     }
-    this.props.queueSong(link);
+    this.props.queueSong(song);
     $(`.link input`).val('');
     this.props.drawerClose();
   }
+
+  handleChange(event) {
+    const { name, value } = event.target;
+
+    this.setState(() => ({
+      [name]: value
+    }));
+  }
+
   handleYouTubeForm = (e) => {
     e.preventDefault();
     this.handleYouTubeSearch();
@@ -82,14 +93,12 @@ class SquadDrawer extends Component {
           <Card>
             <AppBar
               className="dialogAppBar"
-              title={'Squad ID: ' + this.props.squadShortID}
-              style={styles.dialogAppBar}
-              iconElementLeft={<i></i>}
+              title={'Squad ID: ' + this.props.shortId}
+              iconElementLeft={<span></span>}
               iconElementRight={
                 <RaisedButton
                   onClick={ this.props.drawerClose }
                   className="closeButton"
-                  style={styles.closeButton}
                 >
                   <i className="material-icons">close</i>
                 </RaisedButton>
@@ -103,7 +112,10 @@ class SquadDrawer extends Component {
                 <TextField
                   id="ytSearchInput"
                   name="ytSearch"
-                  hintText="Search Term"
+                  onChange={(event) => this.handleChange(event)}
+                  value={this.state.ytSearch}
+                  hintText="Electric Avenue"
+                  floatingLabelText="Search youtube for a song"
                   underlineFocusStyle={styles.ytInputUnderlineFocus}
                 />
               </form>
@@ -120,11 +132,15 @@ class SquadDrawer extends Component {
           </MenuItem>
           <MenuItem className="menuItem">
             <Card>
-              <CardHeader title="SoundCloud, Vimeo or Twitch Link" />
+              <CardHeader title="SoundCloud / Vimeo / Twitch / Vidme" />
               <form onSubmit={(e) => this.handleLinkForm(e)}>
                 <TextField
+                  name="urlField"
+                  onChange={(event) => this.handleChange(event)}
+                  value={this.state.urlField}
                   className="link"
-                  hintText="https://soundcloud.com/song"
+                  hintText="soundcloud.com/rich-the-kid/plug-walk-1"
+                  floatingLabelText="Use a direct URL"
                   underlineFocusStyle={styles.linkInputUnderlineFocus}
                 />
               </form>

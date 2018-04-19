@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import {withRouter} from 'react-router-dom';
 import SquadDialog from './SquadDialog';
-import BottomControls from './BottomControls';
+import BottomToolbar from './BottomToolbar';
 import SquadDrawer from './SquadDrawer';
 import SquadToolbar from './SquadToolbar'
 import InnerContent from './InnerContent';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
+import axios from 'axios';
 import $ from 'jquery';
+import io from 'socket.io-client';
 import './stylesheets/index.scss';
 
 class App extends Component {
@@ -13,59 +16,180 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOwner: true,
+      shortId: this.props.match.params.shortId,
+      isOwner: false,
       dialogOpen: false,
       drawerOpen: false,
+      hideVideoPlayer: false,
+      voteToSkipEnabled: false,
+      requiredVotestoSkip: 1,
       songUrl: null,
-      playing: false,
+      playing: true,
+      volume: 1,
       playlist: [],
       results: []
     };
   }
 
+  componentWillMount() {
+    // Sets authorization header
+    axios.defaults.headers.common['authorization'] = this.props.userToken;
+    axios.defaults.headers.put['Content-Type'] = 'application/json';
+    // Get lobby data and update states
+    axios.post(`/api/getLobby/${this.state.shortId}`).then(res => {
+      if (res.data.success) {
+        // Updates Component Title in the navbar
+        this.props.updateComponentTitle(res.data.lobby.lobbyName);
+
+        const {hideVideoPlayer, voteToSkipEnabled, requiredVotestoSkip} = res.data.lobby.settings;
+
+        // Check to see if user is owner of lobby
+        axios.post('/api/getUser').then(user => {
+          const isOwner = (user.data.user._id === res.data.lobby.users.ownerId);
+          this.setState({isOwner, hideVideoPlayer, voteToSkipEnabled, requiredVotestoSkip, playlist: res.data.lobby.playlist})
+        }).catch(err => this.setState({isOwner: false}));
+
+        // If the playlist is not empty, update it
+        if (res.data.lobby.playlist.length > 0) {
+          const song = res.data.lobby.playlist[0];
+          this.setState({ playlist: res.data.lobby.playlist, songUrl: song.songUrl, playing: true })
+        }
+      } else {
+        this.props.setErrorText(res.data.message);
+      }
+    })
+  }
+
   componentDidMount() {
-    this.props.updateComponentTitle('Lobby Name');
-    if (this.state.playlist.length >= 1) {
+    this.socketHandler();
+  }
+
+  socketHandler() {
+    io.connect({
+       query: 'shortId='+this.state.shortId
+    });
+    io({query: 'shortId='+this.state.shortId}).on('update_playlist', (data) => {
+      this.props.setSuccessText(data.message);
+      // Handle socket payload
+      (data.playlist.length > 0) ?
+      // If the playlist is not empty, update it
+      this.setState({ playlist: data.playlist, songUrl: data.playlist[0].songUrl}) :
+      // If the playlist is empty, append the song, set songUrl, set playing to true
       this.setState({
-        songUrl: this.state.playlist[0].url
-      })
+        playlist: data.playlist,
+        songUrl: data.playlist.length === 0 ? null : data.playlist[0].songUrl
+      });
+    });
+    io({query: 'shortId='+this.state.shortId}).on('update_playing', (data) => {
+      this.setState({playing: data});
+    })
+  }
+  removeSong = (songId) => {
+    // If playlist has a song in it, do this
+    if (this.state.playlist.length > 0) {
+      axios.put(`/api/removeSong/${songId}/fromSquad/${this.state.shortId}`).then(res => {
+        if (res.data.success) {
+          if (res.data.lobby.playlist.length > 0) {
+            this.setState({playlist: res.data.lobby.playlist, songUrl: res.data.lobby.playlist[0].songUrl})
+            // Send out socket event with new playlist and success message
+            return io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: res.data.lobby.playlist, message: res.data.message});
+          } else {
+            this.setState({playlist: [], songUrl: null})
+            // Send out socket event with new playlist and success message
+            return io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: [], message: res.data.message});
+          }
+        } else {
+          this.props.setErrorText(res.data.message);
+        }
+      }).catch(err => this.props.setErrorText(err.message))
     }
   }
   drawerToggle = () => this.setState({drawerOpen: !this.state.drawerOpen});
   drawerClose = () => this.setState({drawerOpen: false});
   dialogClose = () => this.setState({dialogOpen: false});
-  handlePlay = () => this.setState({playing: true});
-  handlePause = () => this.setState({playing: false});
+  handleMute = () => this.setState({volume: 0});
+  handleUnmute = () => this.setState({volume: 1});
+  handlePlay = () => {
+    this.setState({playing: true});
+    if (this.state.isOwner) return io({query: 'shortId='+this.state.shortId}).emit('update_playing', true);
+  }
+  handlePause = () => {
+    this.setState({playing: false})
+    if (this.state.isOwner) return io({query: 'shortId='+this.state.shortId}).emit('update_playing', false);
+  }
   handleEnd = () => {
-    let list = this.state.playlist;
-    // If the playlist has an item, remove it
-    if (list.length > 0) { list.shift() }
-    // If the playlist has another song lined up, update the songUrl and playlist
-    (list.length > 0) ? this.setState({ playing: true, songUrl: list[0].url, playlist: list }) :
-    // If the playlist is empty, pause the player and update playlist & songUrl
-    this.setState({ playing: false, songUrl: null, playlist: [] })
+    if (this.state.playlist.length !== 0) {
+      this.removeSong(this.state.playlist[0]._id);
+    }
   }
   handleSearch = (results) => {
     this.setState({results, dialogOpen: true});
   };
   queueSong = (song) => {
-    if (this.state.playlist.length >= 1) {
-      this.setState({ playlist: [...this.state.playlist, song] });
-    } else {
-      this.setState({ playlist: [song], songUrl: song.url, playing: true });
+    const {songTitle, songUrl} = song;
+
+    axios.put(`/api/queueSong/${this.state.shortId}`, {songTitle, songUrl}).then(res => {
+      if (res.data.success) {
+
+        (res.data.playlist.length > 0) ?
+        // If the playlist is not empty, append song to it
+        this.setState({ playlist: res.data.playlist }) :
+        // If the playlist is empty, append the song, set songUrl, set playing to true
+        this.setState({ playlist: res.data.playlist[0], songUrl: res.data.playlist[0].songUrl, playing: true });
+
+        const socketPayload = {playlist: res.data.playlist, message: res.data.message}
+
+        // Send out socket event with new playlist
+        io({query: 'shortId='+this.state.shortId}).emit('update_playlist', socketPayload);
+      } else {
+        return this.props.setErrorText(res.data.message);
+      }
+    })
+    .catch(err => console.log(err))
+  }
+  moveSongUp = (songId) => {
+    let myPlaylist = [];
+    this.state.playlist.map(song => myPlaylist.push(song));
+    let songMap = [];
+    myPlaylist.map(song => songMap.push(song._id));
+    let indexOfSong = songMap.indexOf(songId);
+    if (indexOfSong > 0) {
+      myPlaylist.splice(indexOfSong, 1);
+      myPlaylist.splice(indexOfSong - 1, 0, this.state.playlist[indexOfSong]);
+      axios.put(`/api/updateLobbyPlaylist/${this.state.shortId}`, {playlist: myPlaylist}).then(res => {
+        if (res.data.success) {
+          this.setState({playlist: res.data.lobby.playlist});
+          io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: res.data.lobby.playlist, message: res.data.message});
+        } else {
+          return this.props.setErrorText(res.message);
+        }
+      }).catch(err => this.props.setErrorText(err.message))
+    }
+  }
+
+  moveSongDown = (songId) => {
+    let myPlaylist = [];
+    this.state.playlist.map(song => myPlaylist.push(song));
+    let songMap = [];
+    myPlaylist.map(song => songMap.push(song._id));
+    let indexOfSong = songMap.indexOf(songId);
+    if (indexOfSong < this.state.playlist.length - 1) {
+      myPlaylist.splice(indexOfSong, 1);
+      myPlaylist.splice(indexOfSong + 1, 0, this.state.playlist[indexOfSong]);
+      axios.put(`/api/updateLobbyPlaylist/${this.state.shortId}`, {playlist: myPlaylist}).then(res => {
+        if (res.data.success) {
+          this.setState({playlist: res.data.lobby.playlist});
+          io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: res.data.lobby.playlist, message: res.data.message});
+        } else {
+          return this.props.setErrorText(res.message);
+        }
+      }).catch(err => this.props.setErrorText(err.message))
     }
   }
 
   render() {
     return (
       <div>
-        <SquadDrawer
-          squadShortID={'DA3jKI42'}
-          drawerOpen={this.state.drawerOpen}
-          drawerClose={this.drawerClose.bind(this)}
-          queueSong={this.queueSong.bind(this)}
-          handleSearch={this.handleSearch.bind(this)}
-        />
         <SquadDialog
           queueSong={this.queueSong.bind(this)}
           results={this.state.results}
@@ -73,29 +197,50 @@ class App extends Component {
           dialogOpen={this.state.dialogOpen}
           clientWidth={this.props.clientWindow.width}
         />
-        <SquadToolbar
-          drawerToggle={this.drawerToggle.bind(this)}
-          squadName={this.props.componentTitle}
+        <SquadDrawer
+          shortId={this.state.shortId}
+          drawerOpen={this.state.drawerOpen}
+          drawerClose={this.drawerClose.bind(this)}
+          queueSong={this.queueSong.bind(this)}
+          handleSearch={this.handleSearch.bind(this)}
         />
-        <BottomControls
-          playing={this.state.playing}
-          handlePlay={this.handlePlay}
-          handlePause={this.handlePause}
-          handleEnd={this.handleEnd}
-        />
-        <InnerContent
-          url={this.state.songUrl}
-          height={this.props.clientWindow.height}
-          onEnded={this.handleEnd.bind(this)}
-          onError={this.handleEnd.bind(this)}
-          handlePlay={this.handlePlay.bind(this)}
-          handlePause={this.handlePause.bind(this)}
-          playing={this.state.playing}
-          playlist={this.state.playlist}
-        />
+        <div>
+          <SquadToolbar
+            drawerToggle={this.drawerToggle.bind(this)}
+            squadName={this.props.componentTitle}
+          />
+          <BottomToolbar
+            playing={this.state.playing}
+            handlePlay={this.handlePlay}
+            handlePause={this.handlePause}
+            handleEnd={this.handleEnd}
+            isOwner={this.state.isOwner}
+            playlist={this.state.playlist}
+            volume={this.state.volume}
+            handleMute={this.handleMute.bind(this)}
+            handleUnmute={this.handleUnmute.bind(this)}
+          />
+          <InnerContent
+            url={this.state.songUrl}
+            height={this.props.clientWindow.height}
+            onEnded={this.handleEnd.bind(this)}
+            onError={this.handleEnd.bind(this)}
+            handlePlay={this.handlePlay.bind(this)}
+            handlePause={this.handlePause.bind(this)}
+            playing={this.state.playing}
+            playlist={this.state.playlist}
+            hideVideoPlayer={this.state.hideVideoPlayer}
+            isOwner={this.state.isOwner}
+            setErrorText={this.props.setErrorText}
+            volume={this.state.volume}
+            removeSong={this.removeSong.bind(this)}
+            moveSongUp={this.moveSongUp.bind(this)}
+            moveSongDown={this.moveSongDown.bind(this)}
+          />
+        </div>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

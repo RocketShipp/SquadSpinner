@@ -5,10 +5,7 @@ import {Card, CardTitle} from 'material-ui/Card';
 import DashToolbar from './dashToolbar';
 import './stylesheets/dash.scss';
 
-const toolbarHeight = 56;
-
 class Dashboard extends Component {
-
 
   componentWillMount() {
     this.props.updateComponentTitle('Dashboard');
@@ -21,9 +18,9 @@ class Dashboard extends Component {
           componentTitle={this.props.componentTitle}
         />
         <Container fluid={true} className="dashContainer" style={{
-          height: (this.props.clientWindow.height - toolbarHeight)
+          height: (this.props.clientWindow.height)
         }}>
-          <Row style={{width: '100%', textAlign: 'center'}}>
+          <Row className="dashRow">
             <Col xs={6} md={4} offset={{md: 2}}>
               <Card className="dashCard">
                 <Link to="/joinsquad">
@@ -32,9 +29,6 @@ class Dashboard extends Component {
                 <CardTitle
                   title="Join"
                   className="dashCardTitle"
-                  style={{
-                    padding: 'none'
-                  }}
                 />
               </Card>
             </Col>
@@ -46,9 +40,6 @@ class Dashboard extends Component {
                 <CardTitle
                   title="Create"
                   className="dashCardTitle"
-                  style={{
-                    padding: 'none'
-                  }}
                 />
               </Card>
             </Col>
@@ -60,9 +51,6 @@ class Dashboard extends Component {
                 <CardTitle
                   title="Squads"
                   className="dashCardTitle"
-                  style={{
-                    padding: 'none'
-                  }}
                 />
               </Card>
             </Col>
@@ -74,9 +62,6 @@ class Dashboard extends Component {
                 <CardTitle
                   title="Account"
                   className="dashCardTitle"
-                  style={{
-                    padding: 'none'
-                  }}
                 />
               </Card>
             </Col>

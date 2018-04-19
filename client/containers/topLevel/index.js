@@ -42,7 +42,7 @@ class App extends Component {
           autoHideDuration={4000}
           bodyStyle={{
             backgroundColor: this.props.successText ? colors.green800 : colors.red900,
-            textAlign: 'center',
+            textAlign: 'center'
           }}
           contentStyle={{
             color: 'white',
@@ -66,6 +66,7 @@ class App extends Component {
                 componentTitle={this.props.componentTitle}
                 updateComponentTitle={this.props.updateComponentTitle}
                 setErrorText={this.props.setErrorText}
+                setSuccessText={this.props.setSuccessText}
                 updateUserToken={this.props.updateUserToken}
                 getUserToken={this.props.getUserToken}
                 userToken={this.props.userToken}
@@ -147,6 +148,9 @@ class App extends Component {
                 componentTitle={this.props.componentTitle}
                 updateComponentTitle={this.props.updateComponentTitle}
                 clientWindow={this.props.clientWindow}
+                setErrorText={this.props.setErrorText}
+                setSuccessText={this.props.setSuccessText}
+                userToken={this.props.userToken}
               />
             }
           />

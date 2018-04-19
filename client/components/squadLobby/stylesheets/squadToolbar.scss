@@ -1,14 +1,25 @@
-.myToolbar {
+.squadToolbar {
   width: 100% !important;
   padding: 0 !important;
-  font-weight: bold;
+  position: fixed;
+  z-index: 5;
   .toolbarTitle {
+    padding-right: 0 !important;
     font-size: 2rem !important;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    margin-left: -56px !important;
+    z-index: 1;
   }
   span, i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
+    height: auto !important;
+    width: auto !important;
+    position: absolute;
+    z-index: 2
   }
 }

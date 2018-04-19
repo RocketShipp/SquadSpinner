@@ -52,23 +52,29 @@ __ __
 `}`
 `}`
 
-### PUT '/updateLobbySettings/:lobby_id'
+### PUT '/updateLobbySettings/:shortId'
 * __Requirements:__ Token stored in authorization header containing userId must be identical to the lobby's ownerId (lobby.users.ownerId)
 * __Request Body:__
-`{ "lobbyName": "Lizard People",`
-`"settings": {`
-`"voteToSkip": { "voteToSkipEnabled": true, "requiredVotesToSkip": 2 },`
+`"voteToSkip": { `
+`"voteToSkipEnabled": true, "requiredVotesToSkip": 2 `
+`},`
 `"hideVideoPlayer": false`
-`}`
+
+### PUT '/updateLobbyPlaylist/:shortId'
+* __Requirements:__ Token stored in authorization header containing userId must be identical to the lobby's ownerId (lobby.users.ownerId)
+* __Note:__ This playlist must be updated with pre-existing song objects
+* __Request Body:__
+`{`
+`{song}`
 `}`
 
 ### DELETE '/deleteLobby/:lobby_id'
 * __Requirements:__ Token stored in authorization header containing userId must be identical to lobby.users.ownerId
 * __Request Body:__ None
 
-### POST '/removeSong/:song_id/fromLobby/:lobby_id'
+### PUT '/removeSong/:song_id/fromSquad/:shortId'
 * __Requirements:__ Token stored in authorization header containing userId must be identical to lobby.users.ownerId
-* __Notes:__ Only the lobby owner may remove a song from the queue
+* __Notes:__ Only the squad owner may remove a song from the queue
 * __Request Body:__ None
 
 __ __
@@ -83,12 +89,7 @@ __ __
 * __Requirements:__ UserId from token in header must exist in the joined users or ownerId of lobby being queried
 * __Request Body:__
 `{ "songTitle": "Metallica - Fade To Black",`
-`"songUrl": "https://www.youtube.com/watch?v=WEQnzs8wl6E",`
-`"provider": "youtube"`
-`"addedByUser": {`
-`"_id": "",`
-`"userName": ""`
-`}`
+`"songUrl": "https://www.youtube.com/watch?v=WEQnzs8wl6E"`
 `}`
 
 ### POST '/leaveLobby/:lobby_id'

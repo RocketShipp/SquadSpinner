@@ -6,30 +6,10 @@ import IconButton from 'material-ui/IconButton';
 import {Container, Row, Col} from 'react-grid-system';
 import {Card} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
 const colors = require('material-ui/styles/colors');
 import $ from 'jquery';
 import './stylesheets/AccountSettings.scss';
-
-const toolbarHeight = 56;
-
-const styles = {
-  iconButton: {
-    height: 'auto',
-    width: 'auto',
-    zIndex: '1'
-  },
-  toolbarTitle: {
-    textAlign: 'center',
-    width: '100%',
-    position: 'fixed',
-    zIndex: '0'
-  },
-  logOutButton: {
-    bottom: '0',
-    display: 'absolute'
-  }
-}
 
 class AccountSettings extends Component {
 
@@ -79,7 +59,6 @@ class AccountSettings extends Component {
         <Toolbar className="myToolbar">
           <IconButton
             className="menuIcon"
-            style={styles.iconButton}
           >
             <Link to="/"><i className="material-icons">arrow_back</i></Link>
           </IconButton>
@@ -87,28 +66,17 @@ class AccountSettings extends Component {
             float="center"
             className="toolbarTitle"
             text={this.props.componentTitle}
-            style={styles.toolbarTitle}
           />
         </Toolbar>
         <Container fluid={true}
-          className="joinSquadContainer"
-          style={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            paddingLeft: 'none',
-            paddingRight: 'none',
-            height: (this.props.clientWindow.height - toolbarHeight)
-        }}>
-          <Row style={{width: '100%', textAlign: 'center', padding: '0', margin: 'auto'}}>
+          className="accountSettingsContainer"
+          style={{ height: this.props.clientWindow.height }}>
+          <Row className="accountSettingsRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
-              style={{
-                textAlign: 'center'
-              }}
             >
-              <Card className="accountCard" style={{textAlign: 'center'}}>
+              <Card className="accountCard">
                 <span>
                   <TextField
                     name="userName"
@@ -121,15 +89,14 @@ class AccountSettings extends Component {
                   <RaisedButton
                     label="Submit"
                     secondary={true}
-                    style={{marginTop: '10px'}}
                     onClick={() => this.handleSubmit()}
                   />
                 </span>
               </Card>
               <RaisedButton
+                className="logOutButton"
                 label="Log Out"
                 backgroundColor={colors.red900}
-                style={styles.logOutButton}
                 onClick={() => this.props.removeUserToken()}
               />
             </Col>

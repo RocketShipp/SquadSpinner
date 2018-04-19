@@ -230,15 +230,12 @@ const unbanUser = ( req, res, done ) => {
 // Update lobby with new playlist
 // Return success message and updated lobby
 const queueSong = ( req, res, done ) => {
-  let user = req.user;
-  let song = req.body;
-  // Add user details to request body
-  song.addedByUser._id = user._id;
-  song.addedByUser.userName = user.userName;
+  const user = req.user;
+  const song = req.body;
+  const shortId = req.params.shortId;
 
   // Find lobby by id in the request URL parameters
-  Lobby.findById({ _id: req.params.lobby_id }).exec().then(oldLobby => {
-
+  Lobby.findOne({ shortId }).exec().then(oldLobby => {
     // Check to see if user owns or is in the lobby
     const joinedUserMap = oldLobby.users.joined.map(user => user._id.toJSON());
     const isOwner = user._id.toJSON() === oldLobby.users.ownerId.toJSON();
@@ -246,24 +243,27 @@ const queueSong = ( req, res, done ) => {
     const allowedToQueue = (isOwner || isInLobby);
 
     // If user isn't owner or in lobby, return false success message
-    if (!allowedToQueue) return done('You must own or be in this lobby to queue a song.', false);
+    if (!allowedToQueue) return done('You must join this squad to queue media.', false);
 
     // Make sure song URL isn't already in the queue
     const playlistUrls = oldLobby.playlist.map(song => {
       return song.songUrl;
     })
     const alreadyQueued = playlistUrls.indexOf(song.songUrl) >= 0;
-    if (alreadyQueued) return done('This song is already in the queue!', false)
+    if (alreadyQueued) return done('This is already in the queue!', false)
+
+    // Add user details to request body
+    song.addedByUser = { _id: user._id, userName: user.userName };
 
     // Add song to existing playlist
     oldLobby.playlist = [...oldLobby.playlist, song];
 
     // Update the lobby's playlist
-    Lobby.findOneAndUpdate({ _id: req.params.lobby_id }, oldLobby).exec()
-    .then(lobby => res.json({ success: true, message: `${user.userName} successfully added ${song.songTitle} to ${lobby.lobbyName}!`, lobby: oldLobby }))
+    Lobby.findOneAndUpdate({ shortId }, oldLobby).exec()
+    .then(lobby => res.json({ success: true, message: `${user.userName} queued ${song.songTitle}.`, playlist: oldLobby.playlist }))
     .catch((err) => done(err, false))
 
-  }).catch((err) => done(err, false));
+  }).catch((err) => done('Lobby does not exist or has been deleted.'));
 }
 
 // Find lobby by id but if it doesn't exist,

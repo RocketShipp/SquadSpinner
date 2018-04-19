@@ -10,30 +10,6 @@ const colors = require('material-ui/styles/colors');
 import './stylesheets/mySquads.scss';
 import $ from 'jquery';
 
-const toolbarHeight = 56;
-
-const styles = {
-  toolbarIconButton: {
-    height: 'auto',
-    width: 'auto',
-    zIndex: '1'
-  },
-  toolbarTitle: {
-    textAlign: 'center',
-    width: '100%',
-    position: 'fixed',
-    zIndex: '0'
-  },
-  squadCard: {
-    backgroundColor: colors.grey800,
-    textAlign: 'center'
-  },
-  cardActions: {
-    display: 'flex',
-    justifyContent: 'center'
-  }
-}
-
 class MySquads extends Component {
 
   constructor() {
@@ -108,14 +84,18 @@ class MySquads extends Component {
     if (this.state.lobbiesOwned.length > 0) {
       this.state.lobbiesOwned.map(lobby => {
         ownedLobbiesArray.push(
-          <Card className="squadCard" key={lobby._id} style={styles.squadCard}>
+          <Card
+            key={lobby._id}
+            className="squadCard"
+            style={{ backgroundColor: colors.grey800 }}
+          >
             <CardHeader
               title={lobby.lobbyName}
               className="squadTitle"
               actAsExpander={true}
               showExpandableButton={false}
             />
-            <CardActions expandable={true} style={styles.cardActions}>
+            <CardActions expandable={true} className="cardActions">
               <RaisedButton
                 backgroundColor={colors.green500}
                 label="Join"
@@ -132,7 +112,7 @@ class MySquads extends Component {
       })
       // Return card with children
       return (
-        <Card className="topLevelCard" style={{textAlign: 'center'}}>
+        <Card className="topLevelCard">
           <CardHeader
             title="Owned"
             className="topCardHeader"
@@ -149,14 +129,18 @@ class MySquads extends Component {
     if (this.state.lobbiesJoined.length > 0) {
       this.state.lobbiesJoined.map(lobby => {
         joinedLobbiesArray.push(
-          <Card className="squadCard" key={lobby._id} style={styles.squadCard}>
+          <Card
+            key={lobby._id}
+            className="squadCard"
+            style={{ backgroundColor: colors.grey800 }}
+          >
             <CardHeader
               title={lobby.lobbyName}
               className="squadTitle"
               actAsExpander={true}
               showExpandableButton={false}
             />
-            <CardActions expandable={true} style={styles.cardActions}>
+            <CardActions expandable={true} className="cardActions">
               <RaisedButton
                 backgroundColor={colors.green500}
                 label="Join"
@@ -173,7 +157,7 @@ class MySquads extends Component {
       })
       // Return card with children
       return (
-        <Card className="topLevelCard" style={{textAlign: 'center'}}>
+        <Card className="topLevelCard">
           <CardHeader
             title="Joined"
             className="topCardHeader"
@@ -193,7 +177,7 @@ class MySquads extends Component {
             title={message}
             className="topCardHeader"
           />
-          <CardActions style={styles.cardActions}>
+          <CardActions className="cardActions">
             <RaisedButton
               secondary={true}
               label="Create A Squad"
@@ -216,7 +200,6 @@ class MySquads extends Component {
         <Toolbar className="myToolbar">
           <IconButton
             className="menuIcon"
-            style={styles.toolbarIconButton}
           >
             <Link to="/"><i className="material-icons">arrow_back</i></Link>
           </IconButton>
@@ -224,26 +207,15 @@ class MySquads extends Component {
             float="center"
             className="toolbarTitle"
             text={this.props.componentTitle}
-            style={styles.toolbarTitle}
           />
         </Toolbar>
         <Container fluid={true}
           className="mySquadsContainer"
-          style={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'center',
-            paddingLeft: 'none',
-            paddingRight: 'none',
-            height: (this.props.clientWindow.height - toolbarHeight)
-        }}>
-          <Row style={{width: '100%', textAlign: 'center', padding: '0', margin: 'auto'}}>
+          style={{ height: (this.props.clientWindow.height) }}>
+          <Row className="mySquadsRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
-              style={{
-                textAlign: 'center'
-              }}
             >
               {this.renderOwnedLobbies()}
               {this.renderJoinedLobbies()}

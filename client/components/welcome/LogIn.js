@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'react-grid-system';
-import RaisedButton from 'material-ui/RaisedButton';
+import RaisedButton from 'material-ui/raisedButton';
 import {Card, CardTitle} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
-
-const toolbarHeight = 56;
 
 class LogIn extends Component {
 
@@ -36,20 +34,14 @@ class LogIn extends Component {
         xs={12} md={8} lg={6}
         offset={{md: 2, lg:3}}
         className="viewCol"
-        style={{
-          textAlign: 'center',
-          maxHeight: this.props.clientHeight - toolbarHeight,
-          overflowY: 'scroll'
-        }}
+        style={{ maxHeight: this.props.clientHeight }}
       >
         <Card
           className="welcomeCard"
         >
           <CardTitle
+            className="welcomeCardTitle"
             title="Log In"
-            style={{
-              padding: 'none'
-            }}
           />
           <form onSubmit={(event) => this.passCredentialsUp(event)}>
             <TextField

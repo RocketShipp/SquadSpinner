@@ -27,9 +27,24 @@ app.use( bodyParser.json() );
 
 Api(app);
 
-server.listen(process.env.PORT);
-
 // Handle socket connections
 io.on('connection', (socket) => {
-  console.log('[Socket.io] Connected to socket');
+
+  let shortId = (socket.handshake['query']['shortId']);
+
+  socket.join(shortId);
+
+  socket.on('disconnect', () => {
+    socket.leave(shortId);
+  })
+
+  socket.on('update_playlist', (playlist) => {
+    io.to(shortId).emit('update_playlist', playlist);
+  });
+
+  socket.on('update_playing', (playing) => {
+    io.to(shortId).emit('update_playing', playing);
+  });
 })
+
+server.listen(process.env.PORT);
