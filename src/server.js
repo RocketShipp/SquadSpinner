@@ -14,7 +14,7 @@ Mongoose.Promise = global.Promise;
 
 app.enable( 'trust proxy' );
 
-Mongoose.connect(process.env.MONGOURI, { useMongoClient: true })
+Mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
   .then(() => console.log('[mongoose] Connected to MongoDB'))
   .catch(() => console.log('[mongoose] Error connecting to MongoDB... Did you run mongod?'));
 
