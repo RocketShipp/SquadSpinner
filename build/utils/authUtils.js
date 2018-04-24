@@ -52,12 +52,11 @@ var jwtOptions = {
   secretOrKey: process.env.SECRET,
   jwtFromRequest: _passportJwt.ExtractJwt.fromHeader('authorization'),
   ignoreExpiration: true
-};
 
-// Decodes token in request header
-// Looks for user in the database using decoded userID
-// Returns user from MongoDB
-var authStrategy = new _passportJwt.Strategy(jwtOptions, function (payload, next, err) {
+  // Decodes token in request header
+  // Looks for user in the database using decoded userID
+  // Returns user from MongoDB
+};var authStrategy = new _passportJwt.Strategy(jwtOptions, function (payload, next, err) {
   var userId = payload._id;
   _UserModel2.default.findById({ _id: payload._id }).exec().then(function (user) {
     return next(null, user);

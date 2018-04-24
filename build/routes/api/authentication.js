@@ -8,8 +8,6 @@ var _passport = require('passport');
 
 var _passport2 = _interopRequireDefault(_passport);
 
-require('../../utils/authutils');
-
 var _userController = require('../controllers/userController');
 
 var _userController2 = _interopRequireDefault(_userController);
@@ -23,6 +21,8 @@ var _lobbyUserController = require('../controllers/lobbyUserController');
 var _lobbyUserController2 = _interopRequireDefault(_lobbyUserController);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+require('../../utils/authutils');
 
 var signInStrategy = _passport2.default.authenticate('signInStrategy', {
   session: false
