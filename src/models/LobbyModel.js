@@ -26,7 +26,6 @@ const LobbySchema = new Schema ({
   playlist: [{
     songTitle: { type: String, required: true },
     songUrl: { type: String, required: true },
-    provider: { type: String, required: true },
     addedByUser: {
       _id: { type: Schema.Types.ObjectId, required: true},
       userName: { type: String, required: true}

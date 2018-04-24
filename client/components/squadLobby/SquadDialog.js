@@ -21,13 +21,17 @@ class SquadDialog extends Component {
               this.props.dialogClose();
               this.props.queueSong({
                 songUrl: result.songUrl,
-                songTitle: result.songTitle,
-                uploader: result.uploader
+                songTitle: result.songTitle
               });
             }}
           >
             <CardMedia
-              overlay={<CardTitle title={result.songTitle} subtitle={`${result.uploader}`} />}
+              overlay={
+                <CardTitle
+                  subtitle={`${result.songTitle}`}
+                  subtitleStyle={{fontWeight: 'bold', color: 'white'}}
+                />
+              }
             >
               <img src={result.image} alt="" />
             </CardMedia>

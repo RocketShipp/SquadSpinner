@@ -21,6 +21,7 @@ renderContent = (props) => {
           // If user is squad owner, render ReactPlayer component
           this.props.isOwner ?
           <ReactPlayer
+            ref={this.props.setPlayerRef}
             url={this.props.url}
             height={(this.props.height - (toolbarHeight * 2)) / 2}
             width={'100%'}

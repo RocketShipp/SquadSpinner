@@ -6,6 +6,7 @@ import SquadDrawer from './SquadDrawer';
 import SquadToolbar from './SquadToolbar'
 import InnerContent from './InnerContent';
 import RaisedButton from 'material-ui/raisedButton';
+import ReactPlayer from 'react-player';
 import axios from 'axios';
 import $ from 'jquery';
 import io from 'socket.io-client';
@@ -62,6 +63,7 @@ class App extends Component {
 
   componentDidMount() {
     this.socketHandler();
+    this.setPlayerRef();
   }
 
   socketHandler() {
@@ -89,6 +91,7 @@ class App extends Component {
       this.setState({playing: data});
     })
   }
+
   removeSong = (songId) => {
     // If playlist has a song in it, do this
     if (this.state.playlist.length > 0) {
@@ -109,29 +112,43 @@ class App extends Component {
       }).catch(err => this.props.setErrorText(err.message))
     }
   }
+
   drawerToggle = () => this.setState({drawerOpen: !this.state.drawerOpen});
+
   drawerClose = () => this.setState({drawerOpen: false});
+
   dialogClose = () => this.setState({dialogOpen: false});
+
   handleMute = () => this.setState({volume: 0});
+
   handleUnmute = () => this.setState({volume: 1});
+
   handlePlay = () => {
     this.setState({playing: true});
     if (this.state.isOwner) return io({query: 'shortId='+this.state.shortId}).emit('update_playing', true);
   }
+
   handlePause = () => {
     this.setState({playing: false})
     if (this.state.isOwner) return io({query: 'shortId='+this.state.shortId}).emit('update_playing', false);
   }
+
   handleEnd = () => {
     if (this.state.playlist.length !== 0) {
       this.removeSong(this.state.playlist[0]._id);
     }
   }
+
   handleSearch = (results) => {
     this.setState({results, dialogOpen: true});
   };
+
   queueSong = (song) => {
     const {songTitle, songUrl} = song;
+
+    if (!ReactPlayer.canPlay(songUrl)) {
+      return this.props.setErrorText('Invalid link!');
+    }
 
     axios.put(`/api/queueSong/${this.state.shortId}`, {songTitle, songUrl}).then(res => {
       if (res.data.success) {
@@ -151,7 +168,9 @@ class App extends Component {
       }
     })
     .catch(err => console.log(err))
+
   }
+
   moveSongUp = (songId) => {
     let myPlaylist = [];
     this.state.playlist.map(song => myPlaylist.push(song));
@@ -192,6 +211,12 @@ class App extends Component {
     }
   }
 
+  setPlayerRef = (player) => {
+    if (player) {
+      this.player = player;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -208,6 +233,7 @@ class App extends Component {
           drawerClose={this.drawerClose.bind(this)}
           queueSong={this.queueSong.bind(this)}
           handleSearch={this.handleSearch.bind(this)}
+          clientWidth={this.props.clientWindow.width}
         />
         <div>
           <SquadToolbar
@@ -241,6 +267,7 @@ class App extends Component {
             removeSong={this.removeSong.bind(this)}
             moveSongUp={this.moveSongUp.bind(this)}
             moveSongDown={this.moveSongDown.bind(this)}
+            setPlayerRef={this.setPlayerRef.bind(this)}
           />
         </div>
       </div>

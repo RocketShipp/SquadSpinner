@@ -30,6 +30,10 @@ class SquadDrawer extends Component {
     }
   }
 
+  determineWidth = () => {
+    return (this.props.clientWidth < 350) ? '100%' : 350;
+  }
+
   handleYouTubeSearch = (props) => {
     let apiKey = youtubeKey;
     let term = $('#ytSearchInput').val().replace(/ /g, '+');
@@ -40,9 +44,8 @@ class SquadDrawer extends Component {
           response.items.forEach(item => {
             newResults.push({
               songUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-              songTitle: `${item.snippet.title}`,
-              image: `${item.snippet.thumbnails.medium.url}`,
-              uploader: `${item.snippet.channelTitle}`
+              songTitle: `[${item.snippet.channelTitle}] - ${item.snippet.title}`,
+              image: `${item.snippet.thumbnails.medium.url}`
             })
           })
           this.props.handleSearch(newResults);
@@ -56,8 +59,7 @@ class SquadDrawer extends Component {
     let linkValue = $(`.link input`).val();
     let song = {
       songUrl: linkValue,
-      songTitle: linkValue,
-      uploader: ''
+      songTitle: linkValue
     }
     this.props.queueSong(song);
     $(`.link input`).val('');
@@ -82,11 +84,10 @@ class SquadDrawer extends Component {
   }
 
   render(props) {
-
     return (
       <div>
         <Drawer
-          width={ 350 }
+          width={ this.determineWidth() }
           open={this.props.drawerOpen}
           className = "drawerContents"
         >
@@ -121,9 +122,8 @@ class SquadDrawer extends Component {
               </form>
               <CardActions>
               <FlatButton
-                id="ytSearchButton"
                 className="searchButton"
-                fullWidth={true}
+                fullWidth={false}
                 label="Submit"
                 onClick={this.handleYouTubeSearch}
               />
@@ -146,9 +146,8 @@ class SquadDrawer extends Component {
               </form>
               <CardActions>
               <FlatButton
-                id="scLinkPaste"
                 onClick={this.handleLink}
-                fullWidth={true}
+                fullWidth={false}
                 label="Submit"
               />
               </CardActions>
