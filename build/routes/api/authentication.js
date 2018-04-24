@@ -20,9 +20,9 @@ var _lobbyUserController = require('../controllers/lobbyUserController');
 
 var _lobbyUserController2 = _interopRequireDefault(_lobbyUserController);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 require('../../utils/authUtils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var signInStrategy = _passport2.default.authenticate('signInStrategy', {
   session: false

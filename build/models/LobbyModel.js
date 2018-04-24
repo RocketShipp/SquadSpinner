@@ -42,7 +42,6 @@ var LobbySchema = new _mongoose.Schema({
   playlist: [{
     songTitle: { type: String, required: true },
     songUrl: { type: String, required: true },
-    provider: { type: String, required: true },
     addedByUser: {
       _id: { type: _mongoose.Schema.Types.ObjectId, required: true },
       userName: { type: String, required: true }

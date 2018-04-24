@@ -77,14 +77,12 @@ class App extends Component {
       // If the playlist is not empty, update it
       this.setState({
         playlist: data.playlist,
-        songUrl: data.playlist[0].songUrl,
-        playing: true
+        songUrl: data.playlist[0].songUrl
       }) :
       // If the playlist is empty, append the song, set songUrl, set playing to true
       this.setState({
         playlist: data.playlist,
-        songUrl: data.playlist.length === 0 ? null : data.playlist[0].songUrl,
-        playing: true
+        songUrl: data.playlist.length === 0 ? null : data.playlist[0].songUrl
       });
     });
     io({query: 'shortId='+this.state.shortId}).on('update_playing', (data) => {
@@ -136,6 +134,7 @@ class App extends Component {
   handleEnd = () => {
     if (this.state.playlist.length !== 0) {
       this.removeSong(this.state.playlist[0]._id);
+      this.handlePlay();
     }
   }
 
