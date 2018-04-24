@@ -73,11 +73,16 @@ class App extends Component {
       // Handle socket payload
       (data.playlist.length > 0) ?
       // If the playlist is not empty, update it
-      this.setState({ playlist: data.playlist, songUrl: data.playlist[0].songUrl}) :
+      this.setState({
+        playlist: data.playlist,
+        songUrl: data.playlist[0].songUrl,
+        playing: true
+      }) :
       // If the playlist is empty, append the song, set songUrl, set playing to true
       this.setState({
         playlist: data.playlist,
-        songUrl: data.playlist.length === 0 ? null : data.playlist[0].songUrl
+        songUrl: data.playlist.length === 0 ? null : data.playlist[0].songUrl,
+        playing: true
       });
     });
     io({query: 'shortId='+this.state.shortId}).on('update_playing', (data) => {
