@@ -2,7 +2,7 @@ import Passport from 'passport';
 import userController from '../controllers/userController';
 import lobbyController from '../controllers/lobbyController';
 import lobbyUserController from '../controllers/lobbyUserController';
-require('../../utils/authutils');
+require('../../utils/authUtils');
 
 const signInStrategy = Passport.authenticate('signInStrategy', {
   session: false
