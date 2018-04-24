@@ -22,7 +22,7 @@ var _lobbyUserController2 = _interopRequireDefault(_lobbyUserController);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-require('../../utils/authutils');
+require('../../utils/authUtils');
 
 var signInStrategy = _passport2.default.authenticate('signInStrategy', {
   session: false
