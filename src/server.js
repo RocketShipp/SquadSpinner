@@ -20,14 +20,14 @@ Mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true })
 
 app.use( express.static('./dist') );
 
-app.get('*', ( req, res ) => res.sendFile( path.resolve('./dist/index.html') ));
+app.get('*', ( req, res ) => res.sendFile( path.resolve('./dist') ));
 
 // use body parser so we can get info from POST and/or URL parameters
 app.use( bodyParser.json() );
 
 Api(app);
 
-// Handle socket connections
+// Handle socket events
 io.on('connection', (socket) => {
 
   let shortId = (socket.handshake['query']['shortId']);
@@ -47,4 +47,4 @@ io.on('connection', (socket) => {
   });
 })
 
-server.listen(process.env.PORT);
+server.listen(process.env.PORT || 80);

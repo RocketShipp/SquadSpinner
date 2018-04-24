@@ -1,12 +1,13 @@
+require("babel-polyfill");
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
-  entry: './client',
+  entry: ['babel-polyfill', './client'],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'index.js'
   },
   watch: true,
   module: {
