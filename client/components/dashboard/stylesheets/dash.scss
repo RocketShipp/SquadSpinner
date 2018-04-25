@@ -1,10 +1,12 @@
-.myToolbar {
+.dashToolbar {
   width: 100% !important;
   padding: 0 !important;
   text-align: center;
   .toolbarTitle {
+    width: 100%;
     padding-right: 0 !important;
-    font-size: 2rem !important;
+    font-size: 1.8rem !important;
+    margin: 0 !important;
   }
   span, i {
     color: white !important;
@@ -18,7 +20,7 @@
   align-items: center !important;
   display: flex !important;
   justify-content: center !important;
-  padding: 56px 0 0 0 !important;
+  padding: 0 !important;
   &::-webkit-scrollbar {
     display: none;
   }

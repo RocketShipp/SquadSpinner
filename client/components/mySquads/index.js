@@ -197,7 +197,7 @@ class MySquads extends Component {
   render(props) {
     return (
       <span>
-        <Toolbar className="myToolbar">
+        <Toolbar className="mySquadsToolbar">
           <IconButton
             className="menuIcon"
           >
@@ -211,11 +211,12 @@ class MySquads extends Component {
         </Toolbar>
         <Container fluid={true}
           className="mySquadsContainer"
-          style={{ height: (this.props.clientWindow.height) }}>
+          style={{ height: (this.props.clientWindow.height - 56) }}>
           <Row className="mySquadsRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
+              className="mySquadsCol"
             >
               {this.renderOwnedLobbies()}
               {this.renderJoinedLobbies()}

@@ -6,6 +6,7 @@
   }
   .dialogAppBar {
     background-color: transparent !important;
+    padding: inherit 0 !important;
     h1 {
       color: white !important;
       font-weight: bold;
@@ -18,16 +19,21 @@
       box-shadow: none !important;
       height: 50px;
       width: 50px;
+      min-width: 50px !important;
       button {
         color: white;
       }
     }
   }
   .menuItem {
-    div {
+    & > div {
       margin: .25rem 0 .25rem 0;
-      div {
+      & > div {
         padding: 0 !important;
+        .menuItemHeader > div {
+          padding: 0 !important;
+          font-weight: bold;
+        }
       }
     }
   }

@@ -62,6 +62,7 @@ renderContent = (props) => {
         <Card className="noItemsCard">
           <CardText>
             <p id="noItemsInPlaylist">Playlist empty</p>
+            <p>Click the menu icon to search YouTube, or supply your own link from SoundCloud, Vimeo, Vidme or Twitch!</p>
           </CardText>
         </Card>
       </Col>

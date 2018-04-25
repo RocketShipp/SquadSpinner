@@ -70,11 +70,12 @@ class JoinSquad extends Component {
         </Toolbar>
         <Container fluid={true}
           className="joinSquadContainer"
-          style={{ height: (this.props.clientWindow.height) }}>
+          style={{ height: (this.props.clientWindow.height - 56) }}>
           <Row className="joinSquadRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
+              className="joinSquadCol"
             >
               <Card className="joinSquadCard">
                 <TextField

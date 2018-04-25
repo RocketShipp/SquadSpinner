@@ -89,7 +89,8 @@ class SquadDrawer extends Component {
         <Drawer
           width={ this.determineWidth() }
           open={this.props.drawerOpen}
-          className = "drawerContents"
+          className="drawerContents"
+          openSecondary={true}
         >
           <Card>
             <AppBar
@@ -108,7 +109,10 @@ class SquadDrawer extends Component {
           </Card>
           <MenuItem className="menuItem">
             <Card>
-              <CardHeader title="Search YouTube" />
+              <CardHeader
+                title="Search YouTube"
+                className="menuItemHeader"
+              />
               <form onSubmit={(e) => this.handleYouTubeForm(e)}>
                 <TextField
                   id="ytSearchInput"
@@ -124,15 +128,20 @@ class SquadDrawer extends Component {
               <FlatButton
                 className="searchButton"
                 fullWidth={false}
-                label="Submit"
+                label="Search"
                 onClick={this.handleYouTubeSearch}
+                backgroundColor={colors.redA700}
+                fullWidth={true}
               />
               </CardActions>
             </Card>
           </MenuItem>
           <MenuItem className="menuItem">
             <Card>
-              <CardHeader title="SoundCloud / Vimeo / Twitch / Vidme" />
+              <CardHeader
+                title="SoundCloud | Vimeo | Twitch | Vidme"
+                className="menuItemHeader"
+              />
               <form onSubmit={(e) => this.handleLinkForm(e)}>
                 <TextField
                   name="urlField"
@@ -146,9 +155,12 @@ class SquadDrawer extends Component {
               </form>
               <CardActions>
               <FlatButton
-                onClick={this.handleLink}
+                className="searchButton"
                 fullWidth={false}
                 label="Submit"
+                onClick={this.handleLink}
+                backgroundColor={colors.orange500}
+                fullWidth={true}
               />
               </CardActions>
             </Card>

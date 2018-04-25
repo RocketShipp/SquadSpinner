@@ -1,27 +1,26 @@
-.myToolbar {
+.createSquadToolbar {
   width: 100% !important;
   padding: 0 !important;
-  position: fixed;
-  z-index: 5;
   .toolbarTitle {
-    font-size: 2rem !important;
-    text-align: center;
     width: 100%;
-    position: fixed;
-    z-index: 0;
+    font-size: 1.8rem !important;
+    padding: 0 !important;
+    margin-left: -56px;
+    text-align: center;
   }
-  span, i {
+  i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
-    height: auto;
-    width: auto;
-    z-index: 1;
+    height: 56px !important;
+    width: 56px !important;
+    position: fixed;
+    z-index: 2
   }
 }
 .createSquadContainer {
-  padding: 56px 0 0 0;
+  padding: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,16 +29,19 @@
     text-align: center;
     padding: 0;
     margin: auto;
-    .createSquadCard {
-      padding: 1rem;
-      #requiredVotesToSkip {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      #voteNumber, .enableVote, .hideVideoPlayer {
-        margin: 1rem 0;
+    .createSqualCol {
+      padding: 0 !important;
+      .createSquadCard {
+        padding: 1rem;
+        #requiredVotesToSkip {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        #voteNumber, .enableVote, .hideVideoPlayer {
+          margin: 1rem 0;
+        }
       }
     }
   }

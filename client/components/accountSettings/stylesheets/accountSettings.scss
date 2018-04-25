@@ -1,45 +1,48 @@
-.myToolbar {
+.accountToolbar {
   width: 100% !important;
   padding: 0 !important;
   .toolbarTitle {
-    font-size: 2rem !important;
-    text-align: center;
     width: 100%;
-    position: fixed;
-    z-index: 0;
+    font-size: 1.8rem !important;
+    padding: 0 !important;
+    margin-left: -56px;
+    text-align: center;
   }
-  span, i {
+  i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
-    height: auto;
-    width: auto;
-    z-index: 1;
+    height: 56px !important;
+    width: 56px !important;
+    position: fixed;
+    z-index: 2
   }
 }
 .accountSettingsContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: auto 0 auto 0;
+  padding: 0 !important;
   .accountSettingsRow {
     padding: 0 !important;
     margin: auto !important;
     width: 100%;
     text-align: center;
-    .accountCard {
-      margin-top: 56px !important;
-      padding: 1rem;
-      text-align: center;
-      button {
-        margin-top: 10px !important;
+    .accountSettingsCol {
+      padding: 0 !important;
+      .accountCard {
+        padding: 1rem;
+        text-align: center;
+        button {
+          margin-top: 10px !important;
+        }
       }
-    }
-    .logOutButton {
-      bottom: 0;
-      display: absolute;
-      width: 100%;
+      .logOutButton {
+        bottom: 0;
+        display: absolute;
+        width: 100%;
+      }
     }
   }
 }

@@ -18,7 +18,7 @@ class Dashboard extends Component {
           componentTitle={this.props.componentTitle}
         />
         <Container fluid={true} className="dashContainer" style={{
-          height: (this.props.clientWindow.height)
+          height: (this.props.clientWindow.height - 56)
         }}>
           <Row className="dashRow">
             <Col xs={6} md={4} offset={{md: 2}}>

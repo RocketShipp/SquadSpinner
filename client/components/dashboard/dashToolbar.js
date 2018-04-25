@@ -3,7 +3,7 @@ import {Toolbar, ToolbarTitle} from 'material-ui/Toolbar';
 
 const Dashboard = (props) => {
   return (
-    <Toolbar className="myToolbar">
+    <Toolbar className="dashToolbar">
       <ToolbarTitle
         float="center"
         className="toolbarTitle"

@@ -12,8 +12,8 @@
     font-size: 2rem;
   }
   .iconButton {
-    height: auto;
-    width: auto;
+    height: 56px !important;
+    width: 56px !important;
     color: white !important;
   }
 }
@@ -37,11 +37,13 @@
       justify-content: space-between !important;
       .noItemsCard {
         width: 100%;
+        line-height: 1.4rem;
         & > div {
           padding-bottom: 0 !important;
         }
         #noItemsInPlaylist {
           font-size: 1.5rem;
+          margin-bottom: .5rem;
         }
       }
     }

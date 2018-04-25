@@ -1,21 +1,21 @@
 .myToolbar {
   width: 100% !important;
   padding: 0 !important;
-  position: fixed;
-  z-index: 5;
   .toolbarTitle {
-    font-size: 2rem !important;
-    text-align: center;
     width: 100%;
-    z-index: 1;
+    font-size: 1.8rem !important;
+    padding: 0 !important;
+    margin-left: -56px;
+    text-align: center;
   }
   span, i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
-    height: auto;
-    width: auto;
+    height: 56px !important;
+    width: 56px !important;
+    position: fixed;
     z-index: 2;
   }
 }
@@ -23,17 +23,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 56px 0 0 0 !important;
+  padding: 0 !important;
   .joinSquadRow {
     width: 100%;
     text-align: center;
     padding: 0;
     margin: auto;
-    .joinSquadCard {
-      padding: 1rem;
-      text-align: left;
-      #squadShortID {
-        text-align: center;
+    .joinSquadCol {
+      padding: 0 !important;
+      .joinSquadCard {
+        padding: 1rem;
+        text-align: left;
+        #squadShortID {
+          text-align: left;
+        }
       }
     }
   }

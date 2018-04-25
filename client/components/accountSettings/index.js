@@ -23,7 +23,7 @@ class AccountSettings extends Component {
 
   componentWillMount() {
     // Updates Component Title in the navbar
-    this.props.updateComponentTitle('Account Settings');
+    this.props.updateComponentTitle('Account');
     // Sets authorization header
     axios.defaults.headers.common['authorization'] = this.props.userToken;
     axios.defaults.headers.put['Content-Type'] = 'application/json';
@@ -56,7 +56,7 @@ class AccountSettings extends Component {
   render(props) {
     return (
       <span>
-        <Toolbar className="myToolbar">
+        <Toolbar className="accountToolbar">
           <IconButton
             className="menuIcon"
           >
@@ -68,13 +68,16 @@ class AccountSettings extends Component {
             text={this.props.componentTitle}
           />
         </Toolbar>
-        <Container fluid={true}
+        <Container
+          fluid={true}
           className="accountSettingsContainer"
-          style={{ height: this.props.clientWindow.height }}>
+          style={{ height: this.props.clientWindow.height - 56 }}
+        >
           <Row className="accountSettingsRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
+              className="accountSettingsCol"
             >
               <Card className="accountCard">
                 <span>

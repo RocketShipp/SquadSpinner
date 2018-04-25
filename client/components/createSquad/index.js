@@ -114,7 +114,7 @@ class CreateSquad extends Component {
   render(props) {
     return (
       <span>
-        <Toolbar className="myToolbar">
+        <Toolbar className="createSquadToolbar">
           <IconButton
             className="menuIcon"
           >
@@ -128,11 +128,12 @@ class CreateSquad extends Component {
         </Toolbar>
         <Container fluid={true}
           className="createSquadContainer"
-          style={{ height: (this.props.clientWindow.height) }}>
+          style={{ height: (this.props.clientWindow.height - 56) }}>
           <Row className="createSquadRow">
             <Col
               xs={12} md={8} lg={6}
               offset={{md: 2, lg:3}}
+              className="createSqualCol"
             >
               <Card className="createSquadCard" style={{textAlign: 'left'}}>
                 <TextField

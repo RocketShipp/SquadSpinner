@@ -1,26 +1,26 @@
-.myToolbar {
+.mySquadsToolbar {
   width: 100% !important;
   padding: 0 !important;
-  position: fixed;
-  z-index: 5;
   .toolbarTitle {
-    font-size: 2rem !important;
-    text-align: center;
     width: 100%;
-    z-index: 1;
+    font-size: 1.8rem !important;
+    padding: 0 !important;
+    margin-left: -56px;
+    text-align: center;
   }
-  span, i {
+  i {
     color: white !important;
   }
   .menuIcon {
     padding: 1rem !important;
-    height: auto;
-    width: auto;
-    z-index: 2;
+    height: 56px !important;
+    width: 56px !important;
+    position: fixed;
+    z-index: 2
   }
 }
 .mySquadsContainer {
-  padding: 56px 0 0 0 !important;
+  padding: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,23 +33,26 @@
     text-align: center;
     padding: 0 !important;
     margin: auto;
-    .cardActions {
-      display: flex;
-      justify-content: center;
-    }
-    .topLevelCard {
-      margin: .5rem 0;
-      padding: 1rem;
-      text-align: center;
-      .topCardHeader {
-        padding: 0 !important;
-        & > div > span {
-          margin: .5rem 0 !important;
-          font-size: 1.5rem !important;
-          font-weight: bold !important;
-        }
-        & > div {
+    .mySquadsCol {
+      padding: 0 !important;
+      .cardActions {
+        display: flex;
+        justify-content: center;
+      }
+      .topLevelCard {
+        margin: .5rem 0;
+        padding: 1rem;
+        text-align: center;
+        .topCardHeader {
           padding: 0 !important;
+          & > div > span {
+            margin: .5rem 0 !important;
+            font-size: 1.5rem !important;
+            font-weight: bold !important;
+          }
+          & > div {
+            padding: 0 !important;
+          }
         }
       }
     }

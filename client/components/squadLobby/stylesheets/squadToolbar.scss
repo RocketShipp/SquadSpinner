@@ -7,9 +7,8 @@
     padding-right: 0 !important;
     font-size: 1.8rem !important;
     width: 100%;
-    text-align: center;
+    text-align: center !important;
     position: absolute;
-    margin-left: -56px !important;
     z-index: 1;
   }
   span, i {
@@ -19,7 +18,5 @@
     padding: 1rem !important;
     height: auto !important;
     width: auto !important;
-    position: absolute;
-    z-index: 2
   }
 }
