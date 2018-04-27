@@ -43,7 +43,7 @@ class SquadDrawer extends Component {
           let newResults = [];
           response.items.forEach(item => {
             newResults.push({
-              songUrl: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+              songUrl: `https://www.youtube.com/embed/${item.id.videoId}`,
               songTitle: `[${item.snippet.channelTitle}] - ${item.snippet.title}`,
               image: `${item.snippet.thumbnails.medium.url}`
             })
