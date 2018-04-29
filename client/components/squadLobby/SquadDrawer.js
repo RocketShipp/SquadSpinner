@@ -37,7 +37,7 @@ class SquadDrawer extends Component {
   handleYouTubeSearch = () => {
     let term = $('#ytSearchInput').val().replace(/ /g, '+');
     if (term !== '') {
-      $.ajax(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=relevance&q=${term}&type=video&videoEmbeddable=true&videoSyndicated=true&videoCategoryId=10&key=${youtubeKey}`, {
+      $.ajax(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=viewCount&q=${term}&type=video&videoEmbeddable=true&videoCategoryId=10&key=${youtubeKey}`, {
         success: (response) => {
           let newResults = [];
           response.items.forEach(item => {
