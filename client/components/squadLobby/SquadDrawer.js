@@ -8,8 +8,8 @@ import {Card, CardActions, CardHeader} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import {youtubeKey} from '../../resources/index.js';
-const colors = require('material-ui/styles/colors');
 import $ from 'jquery';
+const colors = require('material-ui/styles/colors');
 
 const styles = {
   ytInputUnderlineFocus: {
@@ -34,11 +34,10 @@ class SquadDrawer extends Component {
     return (this.props.clientWidth < 350) ? '100%' : 350;
   }
 
-  handleYouTubeSearch = (props) => {
-    let apiKey = youtubeKey;
+  handleYouTubeSearch = () => {
     let term = $('#ytSearchInput').val().replace(/ /g, '+');
     if (term !== '') {
-      $.ajax(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=relevance&q=${term}&type=video&videoEmbeddable=true&videoSyndicated=true&key=${apiKey}`, {
+      $.ajax(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&order=relevance&q=${term}&type=video&videoEmbeddable=true&videoSyndicated=true&videoCategoryId=10&key=${youtubeKey}`, {
         success: (response) => {
           let newResults = [];
           response.items.forEach(item => {

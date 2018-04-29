@@ -15,7 +15,6 @@ class SquadDialog extends Component {
           className="dialogResultCol"
         >
           <Card
-            key={result.songUrl}
             className="dialogResult"
             onClick={() => {
               this.props.dialogClose();
