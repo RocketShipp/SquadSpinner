@@ -34,12 +34,26 @@ renderContent = (props) => {
             style={{display: (this.props.hideVideoPlayer ? 'none' : 'auto')}}
             config={{
               youtube: {
-                playerVars: { rel: 0, controls: 1 }
+                playerVars: {
+                  rel: 0,
+                  controls: 1 ,
+                  autoplay: 1
+                }
               },
               soundcloud: {
+                auto_play: true,
                 buying: false,
                 sharing: false,
                 download: false
+              },
+              twitch: {
+                autoplay: true
+              },
+              vimeo: {
+                playerOptions: {
+                  autplay: true,
+                  autopause: false
+                }
               }
           }}/> : null
         }

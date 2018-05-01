@@ -96,11 +96,9 @@ class App extends Component {
       axios.put(`/api/removeSong/${songId}/fromSquad/${this.state.shortId}`).then(res => {
         if (res.data.success) {
           if (res.data.lobby.playlist.length > 0) {
-            this.setState({playlist: res.data.lobby.playlist, songUrl: res.data.lobby.playlist[0].songUrl})
             // Send out socket event with new playlist and success message
             return io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: res.data.lobby.playlist, message: res.data.message});
           } else {
-            this.setState({playlist: [], songUrl: null})
             // Send out socket event with new playlist and success message
             return io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: [], message: res.data.message});
           }
@@ -122,12 +120,10 @@ class App extends Component {
   handleUnmute = () => this.setState({volume: 1});
 
   handlePlay = () => {
-    this.setState({playing: true});
     if (this.state.isOwner) return io({query: 'shortId='+this.state.shortId}).emit('update_playing', true);
   }
 
   handlePause = () => {
-    this.setState({playing: false})
     if (this.state.isOwner) return io({query: 'shortId='+this.state.shortId}).emit('update_playing', false);
   }
 
@@ -152,12 +148,6 @@ class App extends Component {
     axios.put(`/api/queueSong/${this.state.shortId}`, {songTitle, songUrl}).then(res => {
       if (res.data.success) {
 
-        (res.data.playlist.length > 0) ?
-        // If the playlist is not empty, append song to it
-        this.setState({ playlist: res.data.playlist }) :
-        // If the playlist is empty, append the song, set songUrl, set playing to true
-        this.setState({ playlist: res.data.playlist[0], songUrl: res.data.playlist[0].songUrl, playing: true });
-
         const socketPayload = {playlist: res.data.playlist, message: res.data.message}
 
         // Send out socket event with new playlist
@@ -181,7 +171,6 @@ class App extends Component {
       myPlaylist.splice(indexOfSong - 1, 0, this.state.playlist[indexOfSong]);
       axios.put(`/api/updateLobbyPlaylist/${this.state.shortId}`, {playlist: myPlaylist}).then(res => {
         if (res.data.success) {
-          this.setState({playlist: res.data.lobby.playlist});
           io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: res.data.lobby.playlist, message: res.data.message});
         } else {
           return this.props.setErrorText(res.message);
@@ -201,7 +190,6 @@ class App extends Component {
       myPlaylist.splice(indexOfSong + 1, 0, this.state.playlist[indexOfSong]);
       axios.put(`/api/updateLobbyPlaylist/${this.state.shortId}`, {playlist: myPlaylist}).then(res => {
         if (res.data.success) {
-          this.setState({playlist: res.data.lobby.playlist});
           io({query: 'shortId='+this.state.shortId}).emit('update_playlist', {playlist: res.data.lobby.playlist, message: res.data.message});
         } else {
           return this.props.setErrorText(res.message);
