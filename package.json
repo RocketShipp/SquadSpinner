@@ -1,7 +1,7 @@
 {
   "name": "SquadSpinner",
   "version": "1.0.0",
-  "description": "A Party Playlisting App",
+  "description": "The Party Playlister",
   "main": "index.js",
   "scripts": {
     "start": "node ./serverBuild/server.js",
